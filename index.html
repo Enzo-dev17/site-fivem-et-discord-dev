@@ -1,659 +1,401 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Enzo Dev — FiveM, Sites & Discord</title>
 
-  <style>
-    :root{
-      --bg0:#060816; --bg1:#0a1030;
-      --glass:rgba(10,14,32,.60);
-      --line:rgba(255,255,255,.10);
-      --muted:rgba(255,255,255,.70);
-      --txt:rgba(255,255,255,.92);
-      --a1:#5865F2; --a2:#8b5cf6; --ok:#22c55e; --danger:#ef4444;
-      --r1:22px; --r2:16px;
-      --shadow: 0 26px 85px rgba(0,0,0,.60);
-      --shadow2: 0 18px 45px rgba(0,0,0,.45);
-      --shadow3: 0 10px 25px rgba(0,0,0,.35);
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color:var(--txt);
-      min-height:100vh;
-      background:
-        radial-gradient(900px 520px at 18% 12%, rgba(88,101,242,.22), transparent 60%),
-        radial-gradient(900px 520px at 82% 10%, rgba(139,92,246,.18), transparent 60%),
-        linear-gradient(180deg, var(--bg1), var(--bg0));
-      overflow-x:hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-    /* fond : si image manquante, ça reste beau */
-    body::before{
-      content:"";
-      position:fixed; inset:0;
-      background:
-        radial-gradient(1000px 800px at 20% 25%, rgba(88,101,242,.22), transparent 60%),
-        radial-gradient(900px 700px at 80% 25%, rgba(139,92,246,.18), transparent 60%),
-        linear-gradient(rgba(0,0,0,.62), rgba(0,0,0,.80)),
-        url("banner.png");
-      background-size:cover;
-      background-position:center;
-      background-attachment:fixed;
-      z-index:-2;
-    }
+<title>Enzo Dev</title>
 
-    .wrap{max-width:1120px;margin:0 auto;padding:18px}
+<style>
 
-    .topbar{
-      position:sticky; top:0; z-index:60;
-      padding:12px 0;
-      backdrop-filter: blur(14px);
-      background: rgba(7,9,20,.60);
-      border-bottom:1px solid var(--line);
-    }
-    .nav{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px; flex-wrap:wrap;
-    }
-    .brand{display:flex;align-items:center;gap:12px;font-weight:900}
-    .badge{
-      width:40px;height:40px;border-radius:14px;
-      background:linear-gradient(135deg,#f59e0b,var(--a1));
-      box-shadow:0 16px 30px rgba(0,0,0,.45);
-    }
-    .brand small{display:block;color:var(--muted);font-weight:700;margin-top:2px}
+body{
+font-family:Arial;
+background:#0b0f1a;
+color:white;
+margin:0;
+}
 
-    .hamburger{
-      display:none; padding:10px 12px; border-radius:12px;
-      border:1px solid var(--line); background:rgba(0,0,0,.28);
-      cursor:pointer; font-weight:900;
-    }
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px;
+background:#070b14;
+border-bottom:1px solid #1c2030;
+}
 
-    .tabs{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .tab{
-      padding:10px 14px;border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(0,0,0,.28);
-      cursor:pointer; user-select:none;
-      font-weight:900;
-    }
-    .tab.active{background:linear-gradient(135deg,var(--a1),var(--a2));border-color:transparent}
+.tabs{
+display:flex;
+gap:10px;
+}
 
-    @media (max-width: 860px){
-      .tabs{display:none;width:100%}
-      .tabs.open{display:flex}
-      .hamburger{display:inline-flex}
-    }
+.tab{
+padding:10px 16px;
+background:#111624;
+border-radius:20px;
+cursor:pointer;
+}
 
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      padding:11px 14px;border-radius:12px;
-      border:1px solid transparent;
-      background:linear-gradient(135deg,var(--a1),var(--a2));
-      color:#fff;text-decoration:none;font-weight:900;cursor:pointer;
-      box-shadow:0 14px 30px rgba(88,101,242,.18);
-      white-space:nowrap;
-    }
-    .btn.secondary{background:rgba(0,0,0,.28);border-color:var(--line);box-shadow:none}
-    .btn.danger{background:rgba(239,68,68,.16);border-color:rgba(239,68,68,.35);box-shadow:none}
+.tab.active{
+background:#5865F2;
+}
 
-    .stage{
-      margin-top:18px;
-      border-radius:var(--r1);
-      border:1px solid var(--line);
-      background:var(--glass);
-      backdrop-filter: blur(18px);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
+.container{
+max-width:1000px;
+margin:auto;
+padding:20px;
+}
 
-    .hero{
-      border-bottom:1px solid var(--line);
-      padding:26px;
-      min-height:180px;
-      background:
-        linear-gradient(90deg, rgba(0,0,0,.74), rgba(0,0,0,.12)),
-        url("banner.png");
-      background-size:cover;
-      background-position:center;
-    }
-    .hero h1{font-size:44px;line-height:1.06}
-    .hero p{color:rgba(255,255,255,.88);max-width:920px;line-height:1.55;margin-top:10px}
-    .pill{
-      margin-top:14px; display:inline-flex;align-items:center;gap:9px;
-      padding:8px 11px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(0,0,0,.30); color:var(--muted); font-weight:850;font-size:13px;
-    }
-    .dot{width:8px;height:8px;border-radius:999px;background:var(--ok);box-shadow:0 0 14px rgba(34,197,94,.55)}
+.section{display:none;}
+.section.active{display:block;}
 
-    .content{padding:16px}
-    .section{display:none}
-    .section.active{display:block}
+.card{
+background:#111624;
+padding:20px;
+border-radius:12px;
+margin-bottom:10px;
+}
 
-    .grid{display:grid;gap:12px;margin-top:12px}
-    @media (min-width:900px){ .grid{grid-template-columns:1fr 1fr 1fr} }
+.review{
+background:#111624;
+padding:15px;
+border-radius:10px;
+margin-top:10px;
+}
 
-    .card{
-      border-radius:var(--r2);
-      border:1px solid var(--line);
-      background:rgba(0,0,0,.24);
-      padding:16px;
-      box-shadow:var(--shadow2);
-      min-height:112px;
-    }
-    .card p{color:rgba(255,255,255,.82);line-height:1.6}
+.avatar{
+width:36px;
+height:36px;
+border-radius:50%;
+}
 
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-    .muted{color:var(--muted)}
-    .actions{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+.review-header{
+display:flex;
+gap:10px;
+align-items:center;
+}
 
-    textarea{
-      width:100%; min-height:120px; resize:vertical;
-      padding:12px 12px; border-radius:14px; border:1px solid var(--line);
-      background:rgba(0,0,0,.22); color:#fff; outline:none;
-    }
+.stars span{
+font-size:24px;
+cursor:pointer;
+opacity:0.4;
+}
 
-    .reviews{margin-top:12px;display:grid;gap:12px}
-    .review{
-      border-radius:18px; border:1px solid var(--line);
-      background:rgba(0,0,0,.22); padding:14px; box-shadow:var(--shadow3);
-    }
-    .review-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-    .user{display:flex;align-items:center;gap:10px}
-    .avatar{width:38px;height:38px;border-radius:999px;object-fit:cover;border:1px solid rgba(255,255,255,.18)}
-    .review p{margin-top:10px;color:rgba(255,255,255,.86);line-height:1.62;white-space:pre-wrap}
-    .review-actions{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap}
+.stars span.active{
+opacity:1;
+}
 
-    .stars-display{display:inline-flex; gap:2px; align-items:center;font-size:16px}
-    .stars-display .empty{opacity:.35}
+button{
+background:#5865F2;
+border:none;
+padding:10px 15px;
+border-radius:8px;
+color:white;
+cursor:pointer;
+}
 
-    .stars-picker{
-      display:flex; gap:8px; align-items:center; margin-top:6px;
-      padding:10px 12px; border-radius:14px; border:1px solid var(--line);
-      background:rgba(0,0,0,.20); width:max-content;
-    }
-    .star-btn{font-size:30px;cursor:pointer;user-select:none;opacity:.35;transition:.12s}
-    .star-btn.on{opacity:1}
-    .star-btn:hover{transform:translateY(-2px) scale(1.05);opacity:1}
-    .star-btn.pop{animation: pop .18s ease}
-    @keyframes pop{0%{transform:scale(.94)}70%{transform:scale(1.10)}100%{transform:scale(1)}}
+button.delete{
+background:#ef4444;
+}
 
-    .admin-panel{
-      margin-top:12px;
-      border-radius:18px;
-      border:1px solid rgba(139,92,246,.35);
-      background:rgba(0,0,0,.22);
-      padding:14px;
-    }
-    .admin-badge{
-      display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.25);
-      color:rgba(255,255,255,.80);font-weight:900;font-size:12px;
-    }
-    footer{margin-top:14px;color:rgba(255,255,255,.70);padding:14px 2px 30px}
+textarea{
+width:100%;
+height:100px;
+border-radius:8px;
+border:none;
+margin-top:10px;
+padding:10px;
+background:#0b0f1a;
+color:white;
+}
 
-    /* mini barre debug visible si erreur */
-    #debugBar{
-      display:none;
-      position:fixed;
-      left:12px; right:12px; bottom:12px;
-      z-index:9999;
-      padding:12px 14px;
-      border-radius:14px;
-      border:1px solid rgba(239,68,68,.35);
-      background: rgba(0,0,0,.70);
-      backdrop-filter: blur(10px);
-      color:#fff;
-      font-size:13px;
-      box-shadow:0 18px 40px rgba(0,0,0,.55);
-    }
-    #debugBar b{color:#ffb4b4}
-  </style>
+</style>
+
 </head>
 
 <body>
-  <div id="debugBar"></div>
-
-  <div class="topbar">
-    <div class="wrap nav">
-      <div class="brand">
-        <div class="badge"></div>
-        <div>
-          <div>Enzo Dev — FiveM, Sites & Discord</div>
-          <small>Création de sites / scripts FiveM / bots Discord</small>
-        </div>
-      </div>
-
-      <button class="hamburger" id="burger">☰ Menu</button>
-
-      <div class="tabs" id="tabs">
-        <div class="tab active" data-id="bienvenue" onclick="show('bienvenue', this)">👋 Bienvenue</div>
-        <div class="tab" data-id="fivem" onclick="show('fivem', this)">🎮 FiveM</div>
-        <div class="tab" data-id="sites" onclick="show('sites', this)">🖥️ Sites</div>
-        <div class="tab" data-id="discord" onclick="show('discord', this)">💬 Discord</div>
-        <div class="tab" data-id="avis" onclick="show('avis', this)">⭐ Avis</div>
-      </div>
-
-      <a class="btn" id="contactBtn" href="#" target="_blank" rel="noreferrer">Me contacter</a>
-    </div>
-  </div>
-
-  <div class="wrap">
-    <div class="stage">
-      <div class="hero" id="hero">
-        <div>
-          <h1 id="heroTitle">Bienvenue</h1>
-          <p id="heroDesc">Développement FiveM (ESX/Standalone), création de sites et Discord. Les avis sont publics.</p>
-          <div class="pill"><span class="dot"></span><span id="heroPill">Choisis une catégorie</span></div>
-        </div>
-      </div>
-
-      <div class="content">
-        <div class="section active" id="bienvenue">
-          <div class="grid">
-            <div class="card"><h3>🎮 FiveM</h3><p>Scripts ESX / Standalone, UI, optimisation, logs, stabilité. (pas de QBCore)</p></div>
-            <div class="card"><h3>🖥️ Sites</h3><p>Sites vitrines, landing pages, formulaires, design moderne & responsive.</p></div>
-            <div class="card"><h3>💬 Discord</h3><p>Bots tickets, rôles automatiques, anti-raid, logs & configuration propre.</p></div>
-          </div>
-          <div class="actions">
-            <button class="btn" onclick="show('fivem')">🎮 FiveM</button>
-            <button class="btn secondary" onclick="show('sites')">🖥️ Sites</button>
-            <button class="btn secondary" onclick="show('discord')">💬 Discord</button>
-            <button class="btn secondary" onclick="show('avis')">⭐ Avis</button>
-          </div>
-        </div>
-
-        <div class="section" id="fivem">
-          <div class="grid">
-            <div class="card"><h3>Scripts & Features</h3><p>Jobs, menus, UI, garages, inventaires, crafting… (ESX / Standalone)</p></div>
-            <div class="card"><h3>Optimisation & Fix</h3><p>Réduction du ms, correction erreurs, stabilité, scripts plus légers.</p></div>
-            <div class="card"><h3>Logs & Sécurité</h3><p>Logs Discord, protections, events sécurisés, alertes.</p></div>
-          </div>
-        </div>
-
-        <div class="section" id="sites">
-          <div class="grid">
-            <div class="card"><h3>🖥️ Site vitrine</h3><p>Présentation / portfolio / contact. Responsive mobile/PC.</p></div>
-            <div class="card"><h3>📄 Landing page</h3><p>1 page rapide + boutons Discord/PayPal + formulaire.</p></div>
-            <div class="card"><h3>⚡ Sur mesure</h3><p>Ton idée → un site propre, rapide, moderne.</p></div>
-          </div>
-        </div>
-
-        <div class="section" id="discord">
-          <div class="grid">
-            <div class="card"><h3>Bot Tickets</h3><p>Tickets, transcripts, logs, permissions propres.</p></div>
-            <div class="card"><h3>Rôles & Automations</h3><p>Onboarding, rôles auto, boutons, logs.</p></div>
-            <div class="card"><h3>Anti-raid</h3><p>Anti-spam, protections, alertes, configuration.</p></div>
-          </div>
-        </div>
-
-        <div class="section" id="avis">
-          <div class="row">
-            <div>
-              <h2 style="margin:0 0 6px">⭐ Avis (publics)</h2>
-              <div id="me" class="muted">Tu peux lire les avis sans connexion.</div>
-            </div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
-              <button id="loginBtn" class="btn">Se connecter avec Discord</button>
-              <button id="logoutBtn" class="btn secondary" style="display:none">Se déconnecter</button>
-            </div>
-          </div>
-
-          <div id="adminPanel" class="admin-panel" style="display:none">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-              <div><b>🧑‍💻 Panel admin</b><div class="muted" style="font-size:13px">Tu peux supprimer des avis.</div></div>
-              <span class="admin-badge"><span class="dot"></span> Admin</span>
-            </div>
-          </div>
-
-          <div id="form" style="display:none;margin-top:14px">
-            <div class="card">
-              <h3 style="margin-bottom:10px" id="formTitle">Publier un avis</h3>
-
-              <label class="muted">Note</label>
-              <div class="stars-picker" id="starsPicker">
-                <span class="star-btn on" data-v="1">⭐</span>
-                <span class="star-btn on" data-v="2">⭐</span>
-                <span class="star-btn on" data-v="3">⭐</span>
-                <span class="star-btn on" data-v="4">⭐</span>
-                <span class="star-btn on" data-v="5">⭐</span>
-              </div>
-
-              <label class="muted" style="display:block;margin-top:10px">Message</label>
-              <textarea id="message" placeholder="Ton avis..."></textarea>
-
-              <div class="row" style="margin-top:10px">
-                <div style="display:flex;gap:10px;flex-wrap:wrap">
-                  <button id="sendBtn" class="btn">Publier</button>
-                  <button id="cancelEditBtn" class="btn secondary" style="display:none">Annuler</button>
-                </div>
-                <div class="muted" style="font-size:13px" id="hint"></div>
-              </div>
-            </div>
-          </div>
-
-          <div style="margin-top:14px" class="card">
-            <div class="row">
-              <h3 style="margin:0">Avis publiés</h3>
-              <div class="muted" style="font-size:13px">Visible par tout le monde ✅</div>
-            </div>
-            <div id="list" class="reviews"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <footer>© <span id="year"></span> Enzo Dev — FiveM, Sites & Discord</footer>
-  </div>
-
-  <script>
-    const debugBar = document.getElementById("debugBar");
-    function showDebug(msg){
-      debugBar.style.display = "block";
-      debugBar.innerHTML = `<b>Erreur</b> : ${msg}`;
-      console.error(msg);
-    }
-
-    window.addEventListener("error", (e)=> showDebug(e.message || "Erreur inconnue"));
-    window.addEventListener("unhandledrejection", (e)=> showDebug((e.reason && e.reason.message) ? e.reason.message : String(e.reason)));
-
-    const CONFIG = {
-      discordInvite: "https://discord.gg/FXF3v4YRRr",
-      backgrounds: {
-        bienvenue: "banner.png",
-        fivem: "fivem-logo.png",
-        sites: "banner.png",
-        discord: "discord-logo.png",
-        avis: "banner.png"
-      }
-    };
-
-    document.getElementById("contactBtn").href = CONFIG.discordInvite;
-
-    const heroTitle = document.getElementById("heroTitle");
-    const heroDesc  = document.getElementById("heroDesc");
-    const heroPill  = document.getElementById("heroPill");
-    const heroEl    = document.getElementById("hero");
-
-    const bgStyle = document.createElement("style");
-    document.head.appendChild(bgStyle);
-
-    function setBg(section){
-      const img = CONFIG.backgrounds[section] || CONFIG.backgrounds.bienvenue;
-      bgStyle.textContent = `body::before{background:
-        radial-gradient(1000px 800px at 20% 25%, rgba(88,101,242,.22), transparent 60%),
-        radial-gradient(900px 700px at 80% 25%, rgba(139,92,246,.18), transparent 60%),
-        linear-gradient(rgba(0,0,0,.62), rgba(0,0,0,.80)),
-        url("${img}");
-        background-size:cover;background-position:center;background-attachment:fixed;}`;
-
-      heroEl.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.74), rgba(0,0,0,.12)), url("${img}")`;
-
-      if(section==="bienvenue"){ heroTitle.textContent="Bienvenue"; heroDesc.textContent="Développement FiveM (ESX/Standalone), création de sites et Discord. Les avis sont publics."; heroPill.textContent="Choisis une catégorie"; }
-      if(section==="fivem"){ heroTitle.textContent="Développement FiveM"; heroDesc.textContent="Scripts ESX / Standalone, optimisation, UI, logs…"; heroPill.textContent="ESX / Standalone"; }
-      if(section==="sites"){ heroTitle.textContent="Création de sites"; heroDesc.textContent="Sites vitrines, landing pages, formulaires, design moderne et responsive."; heroPill.textContent="Mobile parfait"; }
-      if(section==="discord"){ heroTitle.textContent="Développement Discord"; heroDesc.textContent="Bots, tickets, rôles automatiques, anti-raid…"; heroPill.textContent="Bots / config"; }
-      if(section==="avis"){ heroTitle.textContent="Avis & retours"; heroDesc.textContent="Avis visibles par tous. Connexion uniquement pour publier/modifier."; heroPill.textContent="Avis publics"; }
-    }
-
-    function show(section, el){
-      document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-      const target = document.getElementById(section);
-      if(target) target.classList.add("active");
-
-      document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-      if(el) el.classList.add("active");
-      setBg(section);
-
-      document.getElementById("tabs").classList.remove("open");
-      window.scrollTo({top:0,behavior:"smooth"});
-    }
-    window.show = show;
-
-    const burger = document.getElementById("burger");
-    burger.addEventListener("click", ()=> document.getElementById("tabs").classList.toggle("open"));
-
-    document.getElementById("year").textContent = new Date().getFullYear();
-    setBg("bienvenue");
-  </script>
-
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-    // IMPORTANT: clé anon public uniquement
-    const SUPABASE_URL = "https://xbqvikovspdkxbncnhlq.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhicXZpa292c3Bka3hibmNuaGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNjMxODMsImV4cCI6MjA4NzgzOTE4M30.mQYqFRgoVXcycRb_27ywHpUpo4qfX9gT2zVddepMI1Q";
-
-    let supabase = null;
-
-    const loginBtn = document.getElementById("loginBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const me = document.getElementById("me");
-    const form = document.getElementById("form");
-    const list = document.getElementById("list");
-    const hint = document.getElementById("hint");
-    const adminPanel = document.getElementById("adminPanel");
-    const formTitle = document.getElementById("formTitle");
-    const messageEl = document.getElementById("message");
-    const sendBtn = document.getElementById("sendBtn");
-    const cancelEditBtn = document.getElementById("cancelEditBtn");
-
-    // ⭐ stars
-    let ratingValue = 5;
-    const starBtns = document.querySelectorAll("#starsPicker .star-btn");
-    function paintStars(v){ starBtns.forEach(s=>s.classList.toggle("on", Number(s.dataset.v)<=v)); }
-    function popStar(el){ el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
-    starBtns.forEach(s=>s.addEventListener("click", ()=>{ ratingValue=Number(s.dataset.v); paintStars(ratingValue); popStar(s);} ));
-    paintStars(5);
-
-    function escapeHtml(str){
-      return String(str).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
-    }
-
-    let editingId = null;
-    function setEditMode(on, review){
-      if(!on){
-        editingId = null;
-        formTitle.textContent = "Publier un avis";
-        sendBtn.textContent = "Publier";
-        cancelEditBtn.style.display = "none";
-        messageEl.value = "";
-        ratingValue = 5;
-        paintStars(5);
-        return;
-      }
-      editingId = review.id;
-      formTitle.textContent = "Modifier ton avis";
-      sendBtn.textContent = "Mettre à jour";
-      cancelEditBtn.style.display = "inline-flex";
-      messageEl.value = review.message || "";
-      ratingValue = Number(review.rating || 5);
-      paintStars(ratingValue);
-      form.scrollIntoView({ behavior:"smooth", block:"start" });
-    }
-    cancelEditBtn.addEventListener("click", ()=> setEditMode(false));
-
-    function starsDisplay(rating){
-      const full = "⭐".repeat(rating);
-      const empty = "☆".repeat(5-rating);
-      const fullHtml = full.split("").map(()=>`<span>⭐</span>`).join("");
-      const emptyHtml = empty.split("").map(()=>`<span class="empty">☆</span>`).join("");
-      return `<div class="stars-display">${fullHtml}${emptyHtml}</div>`;
-    }
-
-    async function safeInit(){
-      try{
-        if(!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.includes("COLLE_")){
-          me.textContent = "⚠️ Mets ta clé Supabase anon public dans le code (SUPABASE_ANON_KEY).";
-          form.style.display = "none";
-        }
-        supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        await refreshSession();
-        await loadReviews();
-
-        supabase.auth.onAuthStateChange(async ()=>{
-          setEditMode(false);
-          await refreshSession();
-          await loadReviews();
-        });
-
-      }catch(e){
-        me.textContent = "Erreur Supabase : " + (e?.message || e);
-      }
-    }
-
-    async function getMe(){
-      if(!supabase) return null;
-      const { data: { session } } = await supabase.auth.getSession();
-      if(!session) return null;
-      const user = session.user;
-      const username = user.user_metadata?.full_name || user.user_metadata?.name || "Discord user";
-      const avatar = user.user_metadata?.avatar_url || user.user_metadata?.picture || "";
-      return { user, username, avatar };
-    }
-
-    async function refreshSession(){
-      if(!supabase) return { logged:false, isAdmin:false, myUserId:null };
-      const meInfo = await getMe();
-
-      if(!meInfo){
-        me.textContent = "Tu peux lire les avis sans connexion. Connecte-toi seulement pour publier/modifier.";
-        loginBtn.style.display = "inline-flex";
-        logoutBtn.style.display = "none";
-        form.style.display = "none";
-        adminPanel.style.display = "none";
-        hint.textContent = "";
-        return { logged:false, isAdmin:false, myUserId:null };
-      }
-
-      me.innerHTML = `Connecté en <b>${escapeHtml(meInfo.username)}</b>.`;
-      loginBtn.style.display = "none";
-      logoutBtn.style.display = "inline-flex";
-      form.style.display = "block";
-
-      const uid = meInfo.user.id;
-      const res = await supabase.from("admins").select("user_id").eq("user_id", uid).maybeSingle();
-      const isAdmin = !!res.data;
-      adminPanel.style.display = isAdmin ? "block" : "none";
-      hint.textContent = isAdmin ? "Admin : tu peux supprimer des avis." : "";
-
-      return { logged:true, isAdmin, myUserId: uid, ...meInfo };
-    }
-
-    async function loadReviews(){
-      if(!supabase){ list.innerHTML = `<div class="muted">Supabase non initialisé.</div>`; return; }
-
-      const { data, error } = await supabase.from("reviews").select("*").order("created_at",{ascending:false});
-
-      if(error){
-        list.innerHTML = `<div class="muted">Erreur: ${escapeHtml(error.message)}</div>`;
-        return;
-      }
-
-      const sessionState = await refreshSession();
-      list.innerHTML = "";
-
-      if(!data?.length){
-        list.innerHTML = `<div class="muted">Aucun avis pour le moment.</div>`;
-        return;
-      }
-
-      for(const r of data){
-        const d = new Date(r.created_at).toLocaleString("fr-FR");
-        const isMine = sessionState.logged && (r.user_id === sessionState.myUserId);
-
-        const div = document.createElement("div");
-        div.className = "review";
-        div.innerHTML = `
-          <div class="review-top">
-            <div class="user">
-              ${r.discord_avatar_url ? `<img class="avatar" src="${escapeHtml(r.discord_avatar_url)}" alt="avatar">` : ""}
-              <div>
-                <div><b>${escapeHtml(r.discord_username)}</b></div>
-                <div class="muted" style="font-size:12px">${escapeHtml(d)}</div>
-              </div>
-            </div>
-            ${starsDisplay(Number(r.rating || 5))}
-          </div>
-
-          <p>${escapeHtml(r.message)}</p>
-
-          <div class="review-actions">
-            ${isMine ? `<button class="btn secondary" data-edit="${r.id}">✏️ Modifier</button>` : ``}
-            ${sessionState.isAdmin ? `<button class="btn danger" data-del="${r.id}">Supprimer</button>` : ``}
-          </div>
-        `;
-        list.appendChild(div);
-      }
-
-      list.querySelectorAll("button[data-edit]").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-          const id = Number(btn.getAttribute("data-edit"));
-          const review = data.find(x => x.id === id);
-          if(review) setEditMode(true, review);
-        });
-      });
-
-      list.querySelectorAll("button[data-del]").forEach(btn=>{
-        btn.addEventListener("click", async ()=>{
-          const id = Number(btn.getAttribute("data-del"));
-          if(!confirm("Supprimer cet avis ?")) return;
-          const { error } = await supabase.from("reviews").delete().eq("id", id);
-          if(error) alert("Erreur: " + error.message);
-          await loadReviews();
-        });
-      });
-    }
-
-    loginBtn.addEventListener("click", async ()=>{
-      if(!supabase) return;
-      await supabase.auth.signInWithOAuth({
-        provider:"discord",
-        options:{ redirectTo: window.location.href.split("#")[0] }
-      });
-    });
-
-    logoutBtn.addEventListener("click", async ()=>{
-      if(!supabase) return;
-      await supabase.auth.signOut();
-      setEditMode(false);
-      await refreshSession();
-      await loadReviews();
-    });
-
-    sendBtn.addEventListener("click", async ()=>{
-      const meInfo = await getMe();
-      if(!meInfo){ alert("Connecte-toi avec Discord d’abord."); return; }
-
-      const message = (messageEl.value || "").trim();
-      if(message.length < 3){ alert("Écris un message (au moins 3 caractères)."); return; }
-
-      const payload = {
-        rating: ratingValue,
-        message,
-        discord_username: meInfo.username,
-        discord_avatar_url: meInfo.avatar
-      };
-
-      if(editingId){
-        const { error } = await supabase.from("reviews").update(payload).eq("id", editingId).eq("user_id", meInfo.user.id);
-        if(error){ alert("Erreur update: " + error.message); return; }
-        setEditMode(false);
-        await loadReviews();
-        return;
-      }
-
-      const { error } = await supabase.from("reviews").insert({ user_id: meInfo.user.id, ...payload });
-      if(error){ alert("Erreur: " + error.message); return; }
-
-      setEditMode(false);
-      await loadReviews();
-    });
-
-    safeInit();
-  </script>
+
+<header>
+
+<h2>Enzo Dev</h2>
+
+<div class="tabs">
+
+<div class="tab active" onclick="show('home',this)">Bienvenue</div>
+<div class="tab" onclick="show('fivem',this)">FiveM</div>
+<div class="tab" onclick="show('sites',this)">Sites</div>
+<div class="tab" onclick="show('discord',this)">Discord</div>
+<div class="tab" onclick="show('avis',this)">Avis</div>
+
+</div>
+
+</header>
+
+<div class="container">
+
+<div id="home" class="section active">
+
+<div class="card">
+<h3>Bienvenue</h3>
+<p>Développement FiveM, sites web et Discord.</p>
+</div>
+
+</div>
+
+<div id="fivem" class="section">
+
+<div class="card">
+Scripts ESX / Standalone
+</div>
+
+</div>
+
+<div id="sites" class="section">
+
+<div class="card">
+Création de sites web modernes.
+</div>
+
+</div>
+
+<div id="discord" class="section">
+
+<div class="card">
+Bots Discord, tickets, rôles auto.
+</div>
+
+</div>
+
+<div id="avis" class="section">
+
+<button id="login">Connexion Discord</button>
+<button id="logout" style="display:none">Déconnexion</button>
+
+<div id="user"></div>
+
+<div id="form" style="display:none">
+
+<div class="stars" id="stars">
+
+<span data-v="1">⭐</span>
+<span data-v="2">⭐</span>
+<span data-v="3">⭐</span>
+<span data-v="4">⭐</span>
+<span data-v="5">⭐</span>
+
+</div>
+
+<textarea id="message"></textarea>
+
+<button id="send">Publier</button>
+
+</div>
+
+<div id="reviews"></div>
+
+</div>
+
+</div>
+
+<script>
+
+function show(id,el){
+
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"))
+document.getElementById(id).classList.add("active")
+
+document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"))
+el.classList.add("active")
+
+}
+
+</script>
+
+<script type="module">
+
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
+
+const supabase = createClient(
+"https://xbqvikovspdkxbncnhlq.supabase.co",
+"COLLE_TA_CLE_ANON_PUBLIC"
+)
+
+const loginBtn=document.getElementById("login")
+const logoutBtn=document.getElementById("logout")
+const userDiv=document.getElementById("user")
+const form=document.getElementById("form")
+const list=document.getElementById("reviews")
+const message=document.getElementById("message")
+
+let rating=5
+let editing=null
+
+const stars=document.querySelectorAll("#stars span")
+
+stars.forEach(s=>{
+s.onclick=()=>{
+rating=Number(s.dataset.v)
+stars.forEach(st=>st.classList.remove("active"))
+for(let i=0;i<rating;i++)stars[i].classList.add("active")
+}
+})
+
+async function getUser(){
+
+const {data:{session}}=await supabase.auth.getSession()
+
+if(!session)return null
+
+return session.user
+
+}
+
+async function refresh(){
+
+const user=await getUser()
+
+if(!user){
+
+loginBtn.style.display="block"
+logoutBtn.style.display="none"
+form.style.display="none"
+userDiv.innerText=""
+
+}else{
+
+loginBtn.style.display="none"
+logoutBtn.style.display="block"
+form.style.display="block"
+
+userDiv.innerText="Connecté"
+
+}
+
+}
+
+async function loadReviews(){
+
+const {data}=await supabase
+.from("reviews")
+.select("*")
+.order("created_at",{ascending:false})
+
+list.innerHTML=""
+
+data.forEach(r=>{
+
+const div=document.createElement("div")
+div.className="review"
+
+div.innerHTML=`
+
+<div class="review-header">
+
+${r.discord_avatar_url?`<img class="avatar" src="${r.discord_avatar_url}">`:``}
+
+<b>${r.discord_username}</b>
+
+</div>
+
+<div>${"⭐".repeat(r.rating)}</div>
+
+<p>${r.message}</p>
+
+<button class="edit" data-id="${r.id}">Modifier</button>
+<button class="delete" data-id="${r.id}">Supprimer</button>
+
+`
+
+list.appendChild(div)
+
+})
+
+document.querySelectorAll(".edit").forEach(b=>{
+b.onclick=async()=>{
+editing=b.dataset.id
+}
+})
+
+document.querySelectorAll(".delete").forEach(b=>{
+b.onclick=async()=>{
+
+await supabase
+.from("reviews")
+.delete()
+.eq("id",b.dataset.id)
+
+loadReviews()
+
+}
+})
+
+}
+
+loginBtn.onclick=async()=>{
+
+await supabase.auth.signInWithOAuth({
+provider:"discord"
+})
+
+}
+
+logoutBtn.onclick=async()=>{
+
+await supabase.auth.signOut()
+
+refresh()
+
+}
+
+document.getElementById("send").onclick=async()=>{
+
+const user=await getUser()
+
+if(!user)return
+
+if(editing){
+
+await supabase
+.from("reviews")
+.update({
+message:message.value,
+rating
+})
+.eq("id",editing)
+
+editing=null
+
+}else{
+
+await supabase
+.from("reviews")
+.insert({
+user_id:user.id,
+discord_username:user.user_metadata.name,
+discord_avatar_url:user.user_metadata.avatar_url,
+message:message.value,
+rating
+})
+
+}
+
+message.value=""
+
+loadReviews()
+
+}
+
+supabase.auth.onAuthStateChange(()=>{
+refresh()
+loadReviews()
+})
+
+refresh()
+loadReviews()
+
+</script>
+
 </body>
 </html>
