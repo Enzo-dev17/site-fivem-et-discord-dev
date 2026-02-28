@@ -1,442 +1,676 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enzo Dev — FiveM & Discord</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Enzo Dev — FiveM & Discord</title>
+  <meta name="description" content="Enzo Dev : développement FiveM (ESX/Standalone) et Discord (bots, tickets, rôles, anti-raid). Avis Discord." />
 
-<style>
-:root{
-  --accent:#5865F2;
-  --line:rgba(255,255,255,.12);
-  --card:rgba(0,0,0,.55);
-  --muted:rgba(255,255,255,.75);
-}
+  <style>
+    :root{
+      --accent:#5865F2;
+      --line:rgba(255,255,255,.12);
+      --card:rgba(0,0,0,.55);
+      --muted:rgba(255,255,255,.78);
+      --ok:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --shadow:0 20px 60px rgba(0,0,0,.55);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:Arial, sans-serif;
+      color:#fff;
+      min-height:100vh;
 
-*{box-sizing:border-box;margin:0;padding:0}
+      /* fond par défaut (FiveM) */
+      background-image:
+        linear-gradient(rgba(0,0,0,0.78),rgba(0,0,0,0.78)),
+        url("fivem-logo.png");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+      transition:0.35s ease;
+    }
 
-body{
-  font-family:Arial;
-  color:white;
+    .container{max-width:1100px;margin:auto;padding:18px}
 
-  /* fond par défaut (FiveM) */
-  background-image:
-    linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),
-    url("fivem-logo.png");
-  background-size:cover;
-  background-position:center;
-  background-attachment:fixed;
-  transition:0.35s ease;
-  min-height:100vh;
-}
+    /* NAV */
+    .topbar{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(10px);
+      background:rgba(10,14,26,.70);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      padding:12px 0;
+    }
+    .brand{
+      font-weight:900;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:18px;
+    }
+    .brand-badge{
+      width:36px;height:36px;border-radius:12px;
+      background:linear-gradient(135deg,var(--warn),var(--accent));
+      box-shadow:0 12px 26px rgba(0,0,0,.35);
+    }
+    .brand span{color:var(--muted);font-weight:700}
 
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:20px;
-}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap}
+    .tab{
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--line);
+      cursor:pointer;
+      user-select:none;
+      font-weight:900;
+      transition:.15s ease;
+    }
+    .tab:hover{transform:translateY(-1px);background:rgba(255,255,255,.06)}
+    .tab.active{background:var(--accent);border-color:transparent}
 
-/* NAV */
-.nav{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  margin-bottom:20px;
-  flex-wrap:wrap;
-}
-.brand{
-  font-weight:900;
-  font-size:18px;
-}
-.tabs{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.tab{
-  padding:10px 15px;
-  border-radius:999px;
-  background:rgba(0,0,0,.35);
-  border:1px solid var(--line);
-  cursor:pointer;
-  user-select:none;
-  font-weight:800;
-}
-.tab.active{background:var(--accent);border-color:transparent}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:11px 14px;border-radius:12px;
+      background:var(--accent);
+      border:none;
+      color:#fff;
+      font-weight:900;
+      cursor:pointer;
+      text-decoration:none;
+      transition:.15s ease;
+    }
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+    .btn.secondary{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--line);
+    }
+    .btn.danger{
+      background:rgba(239,68,68,.18);
+      border:1px solid rgba(239,68,68,.40);
+    }
 
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  padding:12px 16px;
-  border-radius:12px;
-  background:var(--accent);
-  color:white;
-  text-decoration:none;
-  font-weight:900;
-  border:none;
-  cursor:pointer;
-}
-.btn.secondary{
-  background:rgba(0,0,0,.35);
-  border:1px solid var(--line);
-}
+    /* BANNER */
+    .banner{
+      margin-top:14px;
+      border-radius:22px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background-image:url("banner.png");
+      background-size:cover;
+      background-position:center;
+      position:relative;
+      box-shadow:0 12px 34px rgba(0,0,0,.4);
+    }
+    .banner::after{
+      content:"";
+      position:absolute; inset:0;
+      background:linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.12));
+    }
+    .banner-content{
+      position:relative;
+      padding:54px 26px;
+      z-index:1;
+    }
+    .banner h1{font-size:40px;margin-bottom:10px}
+    .banner p{color:#ddd;line-height:1.55;max-width:860px}
+    .pill{
+      margin-top:12px;
+      display:inline-flex;gap:8px;align-items:center;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.30);
+      color:var(--muted);
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:800;
+    }
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--ok)}
 
-/* BANNER */
-.banner{
-  background-image:url("banner.png");
-  background-size:cover;
-  background-position:center;
-  padding:60px 30px;
-  border-radius:20px;
-  margin-bottom:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,.4);
-  border:1px solid var(--line);
-  position:relative;
-  overflow:hidden;
-}
-.banner::after{
-  content:"";
-  position:absolute; inset:0;
-  background:linear-gradient(90deg, rgba(0,0,0,.65), rgba(0,0,0,.12));
-}
-.banner > *{position:relative; z-index:1}
-.banner h1{font-size:40px;margin-bottom:10px}
-.banner p{color:#ddd;max-width:850px;line-height:1.5}
+    /* SECTIONS */
+    .section{display:none;margin-top:14px}
+    .section.active{display:block}
 
-/* Sections */
-.section{display:none}
-.section.active{display:block}
+    .panel{
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+      padding:16px;
+      overflow:hidden;
+    }
 
-.grid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:15px;
-}
-@media (min-width:900px){
-  .grid{grid-template-columns:1fr 1fr 1fr;}
-}
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
-  padding:20px;
-  border-radius:16px;
-  backdrop-filter: blur(2px);
-}
-.card h3{margin-bottom:10px}
-.card p{color:#ddd;line-height:1.6}
+    .grid{display:grid;gap:14px;margin-top:12px}
+    @media (min-width:900px){ .grid{grid-template-columns:1fr 1fr 1fr} }
 
-.review{
-  background:var(--card);
-  border:1px solid var(--line);
-  padding:15px;
-  border-radius:12px;
-  margin-top:10px;
-}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      backdrop-filter: blur(2px);
+    }
+    .card h3{margin-bottom:8px}
+    .card p{color:#ddd;line-height:1.6}
 
-textarea,input{
-  width:100%;
-  padding:10px;
-  border-radius:12px;
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.45);
-  color:white;
-  margin-top:10px;
-  outline:none;
-}
+    /* AVIS */
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .muted{color:var(--muted)}
+    input,textarea{
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.35);
+      color:#fff;
+      outline:none;
+      font-family:inherit;
+    }
+    textarea{min-height:110px;resize:vertical}
+    .reviews{margin-top:12px;display:grid;gap:12px}
+    .review{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      background:rgba(0,0,0,.30);
+    }
+    .review-top{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    }
+    .user{
+      display:flex;align-items:center;gap:10px;
+    }
+    .avatar{
+      width:36px;height:36px;border-radius:999px;object-fit:cover;
+      border:1px solid rgba(255,255,255,.15);
+    }
+    .stars{letter-spacing:2px}
+    .review p{margin-top:8px;color:rgba(255,255,255,.86);line-height:1.6}
 
-/* SPLASH / ACCUEIL */
-.splash{
-  position:fixed;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  z-index:9999;
-  background:
-    radial-gradient(900px 500px at 20% 20%, rgba(88,101,242,.28), transparent 60%),
-    radial-gradient(900px 500px at 80% 20%, rgba(245,158,11,.22), transparent 60%),
-    rgba(0,0,0,.70);
-  backdrop-filter: blur(10px);
-}
-.splash.hidden{display:none}
+    /* SPLASH */
+    .splash{
+      position:fixed; inset:0; z-index:9999;
+      display:flex; align-items:center; justify-content:center;
+      padding:18px;
+      background:
+        radial-gradient(900px 500px at 20% 20%, rgba(88,101,242,.28), transparent 60%),
+        radial-gradient(900px 500px at 80% 20%, rgba(245,158,11,.22), transparent 60%),
+        rgba(0,0,0,.70);
+      backdrop-filter: blur(10px);
+    }
+    .splash.hidden{display:none}
+    .splash-card{
+      width:min(860px, 100%);
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.45);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .splash-hero{
+      background-image:url("banner.png");
+      background-size:cover;
+      background-position:center;
+      padding:26px;
+      position:relative;
+    }
+    .splash-hero::after{
+      content:"";
+      position:absolute; inset:0;
+      background:linear-gradient(90deg, rgba(0,0,0,.78), rgba(0,0,0,.25));
+    }
+    .splash-hero > *{position:relative; z-index:1}
+    .splash-hero h2{font-size:30px;margin-bottom:6px}
+    .splash-hero p{color:var(--muted);line-height:1.5;max-width:660px}
 
-.splash-card{
-  width:min(820px, 100%);
-  border-radius:22px;
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.45);
-  box-shadow:0 20px 60px rgba(0,0,0,.55);
-  overflow:hidden;
-}
-.splash-hero{
-  background-image:url("banner.png");
-  background-size:cover;
-  background-position:center;
-  padding:26px;
-  position:relative;
-}
-.splash-hero::after{
-  content:"";
-  position:absolute; inset:0;
-  background:linear-gradient(90deg, rgba(0,0,0,.75), rgba(0,0,0,.25));
-}
-.splash-hero > *{position:relative; z-index:1}
-.splash-hero h2{font-size:30px;margin-bottom:6px}
-.splash-hero p{color:var(--muted);line-height:1.5;max-width:640px}
+    .splash-body{padding:18px;display:grid;gap:12px}
+    .pick{display:grid;gap:12px}
+    @media (min-width:760px){ .pick{grid-template-columns:1fr 1fr} }
 
-.splash-body{
-  padding:18px;
-  display:grid;
-  gap:12px;
-}
-.pick{
-  display:grid;
-  gap:12px;
-}
-@media (min-width:760px){
-  .pick{grid-template-columns:1fr 1fr;}
-}
-.pick-btn{
-  width:100%;
-  text-align:left;
-  padding:16px;
-  border-radius:16px;
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.35);
-  cursor:pointer;
-  transition:.15s ease;
-}
-.pick-btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.06)}
-.pick-btn b{display:block;font-size:16px;margin-bottom:6px}
-.pick-btn span{color:var(--muted);line-height:1.5;display:block}
+    .pick-btn{
+      width:100%;
+      text-align:left;
+      padding:16px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.35);
+      cursor:pointer;
+      transition:.15s ease;
+    }
+    .pick-btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.06)}
+    .pick-btn b{display:block;font-size:16px;margin-bottom:6px}
+    .pick-btn span{color:var(--muted);line-height:1.5;display:block}
 
-.splash-actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
-  justify-content:space-between;
-  margin-top:6px;
-}
-.small{
-  color:var(--muted);
-  font-size:13px;
-}
-.check{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  user-select:none;
-}
-.check input{width:auto;margin:0}
-</style>
+    .check{
+      display:flex;align-items:center;gap:8px;user-select:none
+    }
+    .check input{width:auto}
+    footer{margin-top:16px;color:var(--muted);border-top:1px solid var(--line);padding:18px 0 34px}
+  </style>
 </head>
 
 <body>
 
-<!-- ACCUEIL (SPLASH) -->
+<!-- ACCUEIL -->
 <div class="splash" id="splash">
   <div class="splash-card">
     <div class="splash-hero">
       <h2>Enzo Dev — FiveM & Discord</h2>
-      <p>Choisis une catégorie pour commencer. (Tu peux aussi passer directement.)</p>
+      <p>Choisis une catégorie pour commencer. Tu peux changer après avec les boutons en haut.</p>
     </div>
-
     <div class="splash-body">
       <div class="pick">
         <button class="pick-btn" onclick="chooseAndEnter('fivem')">
           <b>🎮 FiveM</b>
-          <span>Scripts ESX / Standalone, optimisation, UI, logs Discord.</span>
+          <span>Scripts ESX / Standalone, optimisation, UI, logs.</span>
         </button>
-
         <button class="pick-btn" onclick="chooseAndEnter('discord')">
           <b>💬 Discord</b>
-          <span>Bots, tickets, rôles auto, anti-raid, logs & config.</span>
+          <span>Bots, tickets, rôles auto, anti-raid, logs.</span>
         </button>
       </div>
 
-      <div class="splash-actions">
-        <div class="check">
+      <div class="row">
+        <label class="check">
           <input type="checkbox" id="dontShow">
-          <label for="dontShow" class="small">Ne plus afficher cet accueil</label>
-        </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <span class="muted">Ne plus afficher cet accueil</span>
+        </label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn secondary" onclick="enterDefault()">Entrer</button>
           <a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank" rel="noreferrer">Me contacter</a>
         </div>
       </div>
 
-      <div class="small">Astuce : tu peux changer de catégorie après avec les boutons en haut.</div>
+      <div class="muted" style="font-size:13px">Astuce : Pour poster un avis, connecte-toi avec Discord dans l’onglet “Avis”.</div>
     </div>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="container nav">
+    <div class="brand">
+      <div class="brand-badge"></div>
+      <div>Enzo Dev <span>— FiveM & Discord</span></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" data-id="fivem" onclick="show('fivem', this)">🎮 FiveM</div>
+      <div class="tab" data-id="discord" onclick="show('discord', this)">💬 Discord</div>
+      <div class="tab" data-id="avis" onclick="show('avis', this)">⭐ Avis</div>
+    </div>
+
+    <a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank" rel="noreferrer">Me contacter</a>
   </div>
 </div>
 
 <div class="container">
 
-  <div class="nav">
-    <div class="brand">Enzo Dev — FiveM & Discord</div>
-
-    <div class="tabs">
-      <div class="tab active" data-id="fivem" onclick="show('fivem', this)">FiveM</div>
-      <div class="tab" data-id="discord" onclick="show('discord', this)">Discord</div>
-      <div class="tab" data-id="avis" onclick="show('avis', this)">Avis</div>
-    </div>
-
-    <a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank" rel="noreferrer">Me contacter</a>
-  </div>
-
   <div class="banner">
-    <h1 id="title">Développement FiveM</h1>
-    <p id="desc">Scripts ESX / Standalone, optimisation, UI, logs Discord.</p>
+    <div class="banner-content">
+      <h1 id="title">Développement FiveM</h1>
+      <p id="desc">Scripts ESX / Standalone, optimisation, UI, logs Discord… Un serveur propre, stable et pro.</p>
+      <div class="pill"><span class="dot"></span><span id="pillTxt">ESX / Standalone (pas de QBCore)</span></div>
+    </div>
   </div>
 
   <!-- FIVEM -->
   <div class="section active" id="fivem">
-    <div class="grid">
-      <div class="card">
-        <h3>Scripts</h3>
-        <p>Jobs, inventaires, UI, systèmes RP. (ESX / Standalone — pas de QBCore)</p>
+    <div class="panel">
+      <div class="grid">
+        <div class="card">
+          <h3>Scripts & Features</h3>
+          <p>Jobs, menus, UI, garages, inventaires, crafting, shops, housing… (ESX / Standalone)</p>
+        </div>
+        <div class="card">
+          <h3>Optimisation & Fix</h3>
+          <p>Réduction du ms, correction erreurs, stabilité, nettoyage DB, scripts plus légers.</p>
+        </div>
+        <div class="card">
+          <h3>Logs & Sécurité</h3>
+          <p>Logs Discord, anti-abus basique, events sécurisés, protections et alertes.</p>
+        </div>
       </div>
-      <div class="card">
-        <h3>Optimisation</h3>
-        <p>Réduction ms serveur, correction erreurs, stabilité.</p>
-      </div>
-      <div class="card">
-        <h3>Logs</h3>
-        <p>Logs Discord, sécurité events, alertes.</p>
+      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank" rel="noreferrer">💬 Me contacter sur Discord</a>
+        <button class="btn secondary" onclick="show('avis')">⭐ Donner un avis</button>
       </div>
     </div>
   </div>
 
   <!-- DISCORD -->
   <div class="section" id="discord">
-    <div class="grid">
-      <div class="card">
-        <h3>Bots</h3>
-        <p>Bots tickets, logs, modération.</p>
+    <div class="panel">
+      <div class="grid">
+        <div class="card">
+          <h3>Bot Tickets</h3>
+          <p>Tickets, transcripts, logs, assign staff, catégories, permissions propres.</p>
+        </div>
+        <div class="card">
+          <h3>Rôles & Automations</h3>
+          <p>Rôles auto, onboarding, vérification, boutons, panneaux staff, logs.</p>
+        </div>
+        <div class="card">
+          <h3>Anti-raid</h3>
+          <p>Anti-spam, protections, alertes, restrictions, sécurité basique et configuration.</p>
+        </div>
       </div>
-      <div class="card">
-        <h3>Automations</h3>
-        <p>Rôles auto, onboarding, vérification, boutons.</p>
-      </div>
-      <div class="card">
-        <h3>Anti-raid</h3>
-        <p>Protection spam, alertes, sécurité & configuration.</p>
+      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank" rel="noreferrer">💬 Me contacter sur Discord</a>
+        <button class="btn secondary" onclick="show('avis')">⭐ Donner un avis</button>
       </div>
     </div>
   </div>
 
   <!-- AVIS -->
   <div class="section" id="avis">
-    <div class="card">
-      <h3>Publier un avis</h3>
-      <input id="pseudo" placeholder="Pseudo">
-      <textarea id="msg" placeholder="Ton avis"></textarea>
-      <button class="btn" onclick="addReview()">Publier</button>
-    </div>
+    <div class="panel">
+      <div class="row">
+        <div>
+          <h2 style="margin:0 0 6px">⭐ Avis</h2>
+          <div id="me" class="muted">Chargement…</div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+          <button id="loginBtn" class="btn">Se connecter avec Discord</button>
+          <button id="logoutBtn" class="btn secondary" style="display:none">Se déconnecter</button>
+        </div>
+      </div>
 
-    <div id="reviews"></div>
+      <div id="form" style="display:none;margin-top:14px">
+        <div class="card">
+          <h3 style="margin-bottom:10px">Publier un avis</h3>
+          <label class="muted">Note (1 à 5)</label>
+          <input id="rating" type="number" min="1" max="5" value="5"/>
+
+          <label class="muted" style="display:block;margin-top:10px">Message</label>
+          <textarea id="message" placeholder="Ton avis..."></textarea>
+
+          <div class="row" style="margin-top:10px">
+            <button id="sendBtn" class="btn">Publier</button>
+            <div class="muted" style="font-size:13px">Ton pseudo + avatar Discord seront ajoutés automatiquement.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px" class="card">
+        <div class="row">
+          <h3 style="margin:0">Avis publiés</h3>
+          <div class="muted" style="font-size:13px" id="adminHint"></div>
+        </div>
+        <div id="list" class="reviews"></div>
+      </div>
+    </div>
   </div>
 
+  <footer>© <span id="year"></span> Enzo Dev — FiveM & Discord</footer>
 </div>
 
 <script>
-const BG = {
-  fivem: "linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)), url('fivem-logo.png')",
-  discord: "linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)), url('discord-logo.png')",
-  avis: "linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)), url('discord-logo.png')"
-};
+  // UI: backgrounds fullscreen selon section
+  const BG = {
+    fivem: "linear-gradient(rgba(0,0,0,0.78),rgba(0,0,0,0.78)), url('fivem-logo.png')",
+    discord: "linear-gradient(rgba(0,0,0,0.78),rgba(0,0,0,0.78)), url('discord-logo.png')",
+    avis: "linear-gradient(rgba(0,0,0,0.78),rgba(0,0,0,0.78)), url('discord-logo.png')"
+  };
 
-const titleEl = document.getElementById("title");
-const descEl  = document.getElementById("desc");
-const splash  = document.getElementById("splash");
+  const titleEl = document.getElementById("title");
+  const descEl  = document.getElementById("desc");
+  const pillTxt = document.getElementById("pillTxt");
+  const splash  = document.getElementById("splash");
 
-function setBg(section){
-  document.body.style.backgroundImage = BG[section] || BG.fivem;
+  function setBg(section){
+    document.body.style.backgroundImage = BG[section] || BG.fivem;
 
-  if(section==="fivem"){
-    titleEl.innerText="Développement FiveM";
-    descEl.innerText="Scripts ESX / Standalone, optimisation, UI, logs Discord.";
-  }
-  if(section==="discord"){
-    titleEl.innerText="Développement Discord";
-    descEl.innerText="Bots, tickets, rôles automatiques, anti-raid.";
-  }
-  if(section==="avis"){
-    titleEl.innerText="Avis";
-    descEl.innerText="Laisse un avis sur mon travail.";
-  }
-}
-
-function show(section, el){
-  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-  document.getElementById(section).classList.add("active");
-
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  if(el) el.classList.add("active");
-  else{
-    const tab = document.querySelector(`.tab[data-id="${section}"]`);
-    if(tab) tab.classList.add("active");
+    if(section==="fivem"){
+      titleEl.textContent="Développement FiveM";
+      descEl.textContent="Scripts ESX / Standalone, optimisation, UI, logs Discord… Un serveur propre, stable et pro.";
+      pillTxt.textContent="ESX / Standalone (pas de QBCore)";
+    }
+    if(section==="discord"){
+      titleEl.textContent="Développement Discord";
+      descEl.textContent="Bots, tickets, rôles automatiques, anti-raid… pour un Discord propre et clean.";
+      pillTxt.textContent="Discord (bots / config / sécurité)";
+    }
+    if(section==="avis"){
+      titleEl.textContent="Avis & retours";
+      descEl.textContent="Connecte-toi avec Discord pour laisser un avis (pseudo + avatar auto).";
+      pillTxt.textContent="Avis publics (Discord)";
+    }
   }
 
-  setBg(section);
-}
+  function show(section, el){
+    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+    document.getElementById(section).classList.add("active");
 
-/* Splash logic */
-function hideSplash(){
-  // save preference
-  const dont = document.getElementById("dontShow").checked;
-  if(dont) localStorage.setItem("enzo_splash_hide","1");
-  splash.classList.add("hidden");
-}
+    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    if(el) el.classList.add("active");
+    else{
+      const tab = document.querySelector(`.tab[data-id="${section}"]`);
+      if(tab) tab.classList.add("active");
+    }
 
-function chooseAndEnter(section){
-  show(section);
-  hideSplash();
-}
+    setBg(section);
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
 
-function enterDefault(){
-  // garde ce qui est actif
-  const active = document.querySelector(".tab.active")?.getAttribute("data-id") || "fivem";
-  show(active);
-  hideSplash();
-}
+  function hideSplash(){
+    const dont = document.getElementById("dontShow").checked;
+    if(dont) localStorage.setItem("enzo_splash_hide","1");
+    splash.classList.add("hidden");
+  }
+  function chooseAndEnter(section){ show(section); hideSplash(); }
+  function enterDefault(){
+    const active = document.querySelector(".tab.active")?.getAttribute("data-id") || "fivem";
+    show(active);
+    hideSplash();
+  }
+  (function initSplash(){
+    const hide = localStorage.getItem("enzo_splash_hide")==="1";
+    if(hide) splash.classList.add("hidden");
+    setBg("fivem");
+    document.getElementById("year").textContent = new Date().getFullYear();
+  })();
+</script>
 
-(function initSplash(){
-  const hide = localStorage.getItem("enzo_splash_hide")==="1";
-  if(hide) splash.classList.add("hidden");
-  // applique background initial
-  setBg("fivem");
-})();
+<!-- Supabase + Discord OAuth + Reviews -->
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-/* Avis (simple, visible en session) */
-function addReview(){
-  let pseudo=document.getElementById("pseudo").value.trim() || "Anonyme";
-  let msg=document.getElementById("msg").value.trim();
-  if(msg.length < 3) return;
+  // ✅ tes infos
+  const SUPABASE_URL = "https://xbqvikovspdkxbncnhlq.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhicXZpa292c3Bka3hibmNuaGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNjMxODMsImV4cCI6MjA4NzgzOTE4M30.mQYqFRgoVXcycRb_27ywHpUpo4qfX9gT2zVddepMI1Q";
 
-  let div=document.createElement("div");
-  div.className="review";
-  div.innerHTML="<b>"+escapeHtml(pseudo)+"</b><p style='color:#ddd;line-height:1.6;margin-top:6px'>"+escapeHtml(msg)+"</p>";
-  document.getElementById("reviews").prepend(div);
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  document.getElementById("pseudo").value="";
-  document.getElementById("msg").value="";
-}
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const me = document.getElementById("me");
+  const form = document.getElementById("form");
+  const list = document.getElementById("list");
+  const adminHint = document.getElementById("adminHint");
 
-function escapeHtml(str){
-  return String(str)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
+  const ratingEl = document.getElementById("rating");
+  const messageEl = document.getElementById("message");
+  const sendBtn = document.getElementById("sendBtn");
+
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  async function getMe(){
+    const { data: { session } } = await supabase.auth.getSession();
+    if(!session) return null;
+
+    const user = session.user;
+    const identity = user.identities?.find(i => i.provider === "discord");
+
+    // selon ce que discord renvoie
+    const username =
+      identity?.identity_data?.global_name ||
+      identity?.identity_data?.full_name ||
+      identity?.identity_data?.username ||
+      identity?.identity_data?.name ||
+      "Discord user";
+
+    const avatar =
+      identity?.identity_data?.avatar_url ||
+      identity?.identity_data?.picture ||
+      "";
+
+    return { user, username, avatar };
+  }
+
+  async function refreshSession(){
+    const meInfo = await getMe();
+    if(!meInfo){
+      me.textContent = "Non connecté. (Connecte-toi avec Discord pour poster un avis.)";
+      loginBtn.style.display = "inline-flex";
+      logoutBtn.style.display = "none";
+      form.style.display = "none";
+      adminHint.textContent = "";
+      return { logged:false, isAdmin:false };
+    }
+
+    me.innerHTML = `Connecté en <b>${escapeHtml(meInfo.username)}</b>`;
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "inline-flex";
+    form.style.display = "block";
+
+    // check admin
+    const uid = meInfo.user.id;
+    const res = await supabase.from("admins").select("user_id").eq("user_id", uid).maybeSingle();
+    const isAdmin = !!res.data;
+    adminHint.textContent = isAdmin ? "Mode admin : tu peux supprimer des avis." : "";
+    return { logged:true, isAdmin, ...meInfo };
+  }
+
+  async function loadReviews(){
+    const { data, error } = await supabase
+      .from("reviews")
+      .select("*")
+      .order("created_at", { ascending:false });
+
+    if(error){
+      list.innerHTML = `<div class="muted">Erreur: ${escapeHtml(error.message)}</div>`;
+      return;
+    }
+
+    const sessionState = await refreshSession();
+
+    list.innerHTML = "";
+    if(!data?.length){
+      list.innerHTML = `<div class="muted">Aucun avis pour le moment.</div>`;
+      return;
+    }
+
+    for(const r of data){
+      const stars = "⭐".repeat(r.rating) + "☆".repeat(5 - r.rating);
+      const d = new Date(r.created_at).toLocaleString("fr-FR");
+
+      const div = document.createElement("div");
+      div.className = "review";
+      div.innerHTML = `
+        <div class="review-top">
+          <div class="user">
+            ${r.discord_avatar_url ? `<img class="avatar" src="${escapeHtml(r.discord_avatar_url)}" alt="avatar">` : ""}
+            <div>
+              <div><b>${escapeHtml(r.discord_username)}</b></div>
+              <div class="muted" style="font-size:12px">${escapeHtml(d)}</div>
+            </div>
+          </div>
+          <div class="stars">${stars}</div>
+        </div>
+        <p>${escapeHtml(r.message)}</p>
+        ${
+          sessionState.isAdmin
+          ? `<div style="margin-top:10px"><button class="btn danger" data-del="${r.id}">Supprimer</button></div>`
+          : ``
+        }
+      `;
+      list.appendChild(div);
+    }
+
+    // bind delete buttons
+    list.querySelectorAll("button[data-del]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = Number(btn.getAttribute("data-del"));
+        if(!confirm("Supprimer cet avis ?")) return;
+        const { error } = await supabase.from("reviews").delete().eq("id", id);
+        if(error) alert("Erreur: " + error.message);
+        await loadReviews();
+      });
+    });
+  }
+
+  loginBtn.addEventListener("click", async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "discord",
+      options: { redirectTo: window.location.origin }
+    });
+  });
+
+  logoutBtn.addEventListener("click", async () => {
+    await supabase.auth.signOut();
+    await refreshSession();
+    await loadReviews();
+  });
+
+  sendBtn.addEventListener("click", async () => {
+    const meInfo = await getMe();
+    if(!meInfo){
+      alert("Connecte-toi avec Discord d’abord.");
+      return;
+    }
+
+    const rating = Math.max(1, Math.min(5, Number(ratingEl.value || 5)));
+    const message = (messageEl.value || "").trim();
+
+    if(message.length < 3){
+      alert("Écris un message (au moins 3 caractères).");
+      return;
+    }
+
+    const { user, username, avatar } = meInfo;
+
+    const { error } = await supabase.from("reviews").insert({
+      user_id: user.id,
+      discord_username: username,
+      discord_avatar_url: avatar,
+      rating,
+      message
+    });
+
+    if(error){
+      alert("Erreur: " + error.message);
+      return;
+    }
+
+    messageEl.value = "";
+    ratingEl.value = "5";
+    await loadReviews();
+  });
+
+  // refresh auto
+  supabase.auth.onAuthStateChange(async () => {
+    await refreshSession();
+    await loadReviews();
+  });
+
+  // init
+  await refreshSession();
+  await loadReviews();
 </script>
 
 </body>
