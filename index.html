@@ -13,15 +13,15 @@
       --line:rgba(255,255,255,.12);
       --text:#ffffff;
       --muted:rgba(255,255,255,.72);
-      --accent:#5865F2;        /* Discord */
-      --accent2:#f59e0b;       /* FiveM / orange */
+      --accent:#5865F2;
+      --accent2:#f59e0b;
       --ok:#22c55e;
       --radius:16px;
       --shadow:0 12px 30px rgba(0,0,0,.35);
     }
-
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
+
     body{
       font-family: Arial, sans-serif;
       color:var(--text);
@@ -139,53 +139,39 @@
     }
     .dot{width:8px;height:8px;border-radius:999px;background:var(--ok)}
 
-    /* SECTIONS + watermark per category (FIXED) */
+    /* SECTIONS */
     section{padding:16px 0}
     .section{
       display:none;
-      position:relative;
-      overflow:hidden;
+      position:relative;       /* IMPORTANT */
+      overflow:hidden;         /* IMPORTANT */
       border-radius:22px;
     }
     .section.active{display:block}
 
-    /* Watermark base */
+    /* Watermark (logos en arrière-plan) */
     .section::before{
       content:"";
       position:absolute;
       top:50%;
       right:40px;
       transform:translateY(-50%);
-      background-repeat:no-repeat;
-      background-position:center;
-      pointer-events:none;
-      opacity:0.08;           /* plus discret */
-      filter: blur(.2px);
-    }
-
-    /* Logos */
-    #fivem::before{
-      background-image:url("fivem-logo.png");
-      background-size:220px;
-      width:220px;
-      height:220px;
-    }
-    #discord::before{
-      background-image:url("discord-logo.png");
-      background-size:260px;
       width:260px;
       height:260px;
-    }
-    #avis::before{
-      background-image:url("discord-logo.png");
-      background-size:240px;
-      width:240px;
-      height:240px;
-      opacity:0.06;
+      background-repeat:no-repeat;
+      background-position:center;
+      background-size:contain;
+      opacity:0.12;            /* visible mais discret */
+      pointer-events:none;
     }
 
+    /* Chaque section a son logo */
+    #fivem::before{ background-image:url("fivem-logo.png"); }
+    #discord::before{ background-image:url("discord-logo.png"); }
+    #avis::before{ background-image:url("discord-logo.png"); opacity:0.08; }
+
     .inner{
-      position:relative;
+      position:relative; /* pour que le contenu passe au-dessus du ::before */
       padding:16px;
       border:1px solid var(--line);
       background:rgba(0,0,0,.12);
@@ -272,7 +258,6 @@
   </div>
 
   <div class="container">
-    <!-- BANNER -->
     <div class="banner">
       <div class="banner-content">
         <h1 id="heroTitle">Développement FiveM</h1>
@@ -390,7 +375,6 @@
     const DISCORD_INVITE = "https://discord.gg/FXF3v4YRRr";
     const STORAGE_KEY = "enzo_dev_reviews_v1";
 
-    // Tabs
     const tabs = document.querySelectorAll(".tab");
     const sections = document.querySelectorAll(".section");
     const heroTitle = document.getElementById("heroTitle");
@@ -416,10 +400,11 @@
       }
       window.scrollTo({top: 0, behavior: "smooth"});
     }
+
     tabs.forEach(tab => tab.addEventListener("click", () => setActive(tab.dataset.target)));
     function goAvis(){ setActive("avis"); }
+    function openDiscord(){ window.open(DISCORD_INVITE, "_blank", "noreferrer"); }
 
-    // Year
     document.getElementById("year").textContent = new Date().getFullYear();
 
     // Stars
@@ -432,21 +417,15 @@
     }
     starEls.forEach(s => s.addEventListener("click", () => { note = Number(s.dataset.v); updateStars(); }));
 
-    function openDiscord(){ window.open(DISCORD_INVITE, "_blank", "noreferrer"); }
-
-    // Reviews storage
+    // Storage
     function loadReviews(){
       try{
         const raw = localStorage.getItem(STORAGE_KEY);
         const arr = raw ? JSON.parse(raw) : [];
         return Array.isArray(arr) ? arr : [];
-      }catch(e){
-        return [];
-      }
+      }catch(e){ return []; }
     }
-    function saveReviews(arr){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
-    }
+    function saveReviews(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
 
     function escapeHtml(str){
       return String(str)
@@ -498,24 +477,16 @@
       const pseudo = (document.getElementById("pseudo").value || "").trim() || "Anonyme";
       const msg = (document.getElementById("msg").value || "").trim();
 
-      if(note < 1){
-        toast("❌ Mets une note (1 à 5 étoiles).");
-        return;
-      }
-      if(msg.length < 3){
-        toast("❌ Écris un petit message (au moins 3 caractères).");
-        return;
-      }
+      if(note < 1){ toast("❌ Mets une note (1 à 5 étoiles)."); return; }
+      if(msg.length < 3){ toast("❌ Écris un petit message (au moins 3 caractères)."); return; }
 
       const arr = loadReviews();
       arr.push({ pseudo, msg, note, ts: Date.now() });
       saveReviews(arr);
 
-      // reset
       document.getElementById("pseudo").value = "";
       document.getElementById("msg").value = "";
-      note = 0;
-      updateStars();
+      note = 0; updateStars();
 
       renderReviews();
       toast("✅ Avis publié ! (il reste sur le site)");
@@ -527,7 +498,6 @@
       toast("🗑️ Avis supprimés (sur ce navigateur).");
     }
 
-    // initial
     renderReviews();
     updateStars();
   </script>
