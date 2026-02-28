@@ -1,503 +1,346 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Enzo Dev — FiveM & Discord</title>
-  <meta name="description" content="Enzo Dev : développement FiveM (ESX/Standalone) et Discord (bots, tickets, rôles, anti-raid). Avis et devis." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    :root{
-      --bg:#0f172a;
-      --card:rgba(255,255,255,.06);
-      --line:rgba(255,255,255,.12);
-      --text:#ffffff;
-      --muted:rgba(255,255,255,.72);
-      --accent:#5865F2;
-      --accent2:#f59e0b;
-      --ok:#22c55e;
-      --radius:16px;
-      --shadow:0 12px 30px rgba(0,0,0,.35);
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0}
+<title>Enzo Dev — FiveM & Discord</title>
 
-    body{
-      font-family: Arial, sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(900px 500px at 15% 10%, rgba(88,101,242,.18), transparent 55%),
-        radial-gradient(900px 500px at 90% 10%, rgba(245,158,11,.14), transparent 55%),
-        var(--bg);
-    }
-    a{color:inherit;text-decoration:none}
+<style>
 
-    .container{max-width:1050px;margin:0 auto;padding:18px}
-
-    /* NAV */
-    .topbar{
-      position:sticky; top:0; z-index:10;
-      background:rgba(15,23,42,.70);
-      backdrop-filter: blur(10px);
-      border-bottom:1px solid var(--line);
-    }
-    .nav{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-      padding:12px 0;
-    }
-    .brand{
-      font-weight:900;font-size:18px;
-      display:flex; align-items:center; gap:10px;
-    }
-    .logo{
-      width:36px;height:36px;border-radius:12px;
-      background:linear-gradient(135deg,var(--accent2),var(--accent));
-      box-shadow:var(--shadow);
-    }
-    .brand span{color:var(--muted);font-weight:700}
-
-    .tabs{display:flex;gap:10px;flex-wrap:wrap}
-    .tab{
-      border:1px solid var(--line);
-      background:rgba(0,0,0,.18);
-      color:var(--text);
-      padding:10px 14px;
-      border-radius:999px;
-      cursor:pointer;
-      transition:.15s ease;
-      user-select:none;
-      font-weight:800;
-    }
-    .tab:hover{transform:translateY(-1px);background:rgba(255,255,255,.08)}
-    .tab.active{
-      border:none;
-      background:linear-gradient(135deg,var(--accent),#7c3aed);
-      box-shadow:var(--shadow);
-    }
-
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:10px;
-      border:none;
-      padding:11px 14px;
-      border-radius:12px;
-      cursor:pointer;
-      font-weight:900;
-      background:var(--accent);
-      color:white;
-      transition:.15s ease;
-      box-shadow:0 10px 22px rgba(0,0,0,.25);
-    }
-    .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
-    .btn.secondary{
-      background:rgba(255,255,255,.10);
-      border:1px solid var(--line);
-      box-shadow:none;
-    }
-    .danger{
-      background:rgba(239,68,68,.15);
-      border:1px solid rgba(239,68,68,.35);
-      color:#fff;
-      box-shadow:none;
-    }
-
-    /* BANNER */
-    .banner{
-      height:260px;
-      border-radius:22px;
-      overflow:hidden;
-      border:1px solid var(--line);
-      box-shadow:var(--shadow);
-      background-image:url("banner.png");
-      background-size:cover;
-      background-position:center;
-      position:relative;
-      margin-top:14px;
-    }
-    .banner::after{
-      content:"";
-      position:absolute; inset:0;
-      background:linear-gradient(90deg, rgba(0,0,0,.60), rgba(0,0,0,.12));
-    }
-    .banner-content{
-      position:absolute; inset:0;
-      display:flex;flex-direction:column;justify-content:center;
-      padding:22px;
-      z-index:1;
-    }
-    .banner h1{margin:0 0 8px; font-size:40px}
-    .banner p{margin:0; color:rgba(255,255,255,.80); line-height:1.5; max-width:760px}
-    .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      margin-top:12px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(0,0,0,.25);
-      color:rgba(255,255,255,.76);
-      font-size:13px;
-      width:fit-content;
-    }
-    .dot{width:8px;height:8px;border-radius:999px;background:var(--ok)}
-
-    /* SECTIONS */
-    section{padding:16px 0}
-    .section{display:none}
-    .section.active{display:block}
-
-    /* IMPORTANT : fond global (logo) sur toute la zone .inner */
-.inner{
-  position:relative;
-  padding:16px;
-  border:1px solid var(--line);
-  border-radius:22px;
-  overflow:hidden;
-
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-
-    /* Logos selon catégorie + voile sombre pour lisibilité */
-#fivem .inner{
-  background-image:
-    linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-    url("fivem-logo.png");
+:root{
+--accent:#5865F2;
+--line:rgba(255,255,255,.12);
 }
 
-#discord .inner{
-  background-image:
-    linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-    url("discord-logo.png");
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
 }
 
-#avis .inner{
-  background-image:
-    linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-    url("discord-logo.png");
+body{
+font-family:Arial;
+color:white;
+
+/* FOND ÉCRAN */
+background-image:
+linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),
+url("fivem-logo.png");
+
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+transition:0.4s;
 }
 
-    .grid{display:grid;gap:14px;margin-top:14px}
-    @media (min-width:900px){ .grid{grid-template-columns:1fr 1fr 1fr} }
+/* container */
 
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:16px;
-      backdrop-filter: blur(2px);
-    }
-    .card h3{margin:0 0 8px}
-    .card p{margin:0;color:var(--muted);line-height:1.6}
-    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.container{
+max-width:1100px;
+margin:auto;
+padding:20px;
+}
 
-    /* AVIS */
-    .stars{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .star{font-size:28px;cursor:pointer;user-select:none;opacity:.45;transition:.12s ease}
-    .star.active{opacity:1; transform:translateY(-1px)}
-    .input, textarea{
-      width:100%;
-      padding:12px 12px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:rgba(0,0,0,.22);
-      color:white;
-      outline:none;
-      font-family:inherit;
-    }
-    textarea{min-height:110px;resize:vertical}
-    .two{display:grid;gap:12px}
-    @media (min-width:780px){ .two{grid-template-columns:1fr 1fr} }
+/* NAV */
 
-    .reviews{margin-top:14px;display:grid;gap:12px}
-    .review{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      border-radius:16px;
-      padding:14px;
-    }
-    .review-top{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-      margin-bottom:6px;
-    }
-    .review b{font-size:14px}
-    .review small{color:var(--muted)}
-    .review .r-stars{letter-spacing:2px}
-    .review p{margin:8px 0 0;color:rgba(255,255,255,.80);line-height:1.6}
+.nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
 
-    .toast{
-      position:fixed;right:16px;bottom:16px;
-      background:rgba(20,26,45,.95);
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:12px 14px;
-      box-shadow:var(--shadow);
-      display:none;
-      max-width:380px;
-    }
-    footer{padding:22px 0 34px;color:var(--muted);border-top:1px solid var(--line);margin-top:14px}
-  </style>
+.brand{
+font-weight:bold;
+font-size:20px;
+}
+
+.tabs{
+display:flex;
+gap:10px;
+}
+
+.tab{
+padding:10px 15px;
+border-radius:10px;
+background:rgba(0,0,0,.4);
+border:1px solid var(--line);
+cursor:pointer;
+}
+
+.tab.active{
+background:var(--accent);
+}
+
+/* banner */
+
+.banner{
+background-image:url("banner.png");
+background-size:cover;
+background-position:center;
+
+padding:60px 30px;
+border-radius:20px;
+margin-bottom:20px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+
+.banner h1{
+font-size:40px;
+margin-bottom:10px;
+}
+
+.banner p{
+color:#ccc;
+}
+
+/* cards */
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:15px;
+margin-top:20px;
+}
+
+.card{
+background:rgba(0,0,0,.5);
+border:1px solid var(--line);
+padding:20px;
+border-radius:15px;
+}
+
+.card h3{
+margin-bottom:10px;
+}
+
+.card p{
+color:#ccc;
+}
+
+/* boutons */
+
+.btn{
+display:inline-block;
+margin-top:15px;
+padding:12px 18px;
+border-radius:10px;
+background:var(--accent);
+color:white;
+text-decoration:none;
+font-weight:bold;
+}
+
+/* sections */
+
+.section{
+display:none;
+}
+
+.section.active{
+display:block;
+}
+
+/* avis */
+
+textarea,input{
+width:100%;
+padding:10px;
+border-radius:10px;
+border:1px solid var(--line);
+background:rgba(0,0,0,.5);
+color:white;
+margin-top:10px;
+}
+
+.review{
+background:rgba(0,0,0,.5);
+border:1px solid var(--line);
+padding:15px;
+border-radius:10px;
+margin-top:10px;
+}
+
+</style>
 </head>
 
 <body>
-  <div class="topbar">
-    <div class="container nav">
-      <div class="brand">
-        <div class="logo"></div>
-        <div>Enzo Dev <span>— FiveM & Discord</span></div>
-      </div>
 
-      <div class="tabs">
-        <div class="tab active" data-target="fivem">🎮 FiveM</div>
-        <div class="tab" data-target="discord">💬 Discord</div>
-        <div class="tab" data-target="avis">⭐ Avis</div>
-      </div>
+<div class="container">
 
-      <a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank" rel="noreferrer">Me contacter</a>
-    </div>
-  </div>
+<div class="nav">
 
-  <div class="container">
-    <div class="banner">
-      <div class="banner-content">
-        <h1 id="heroTitle">Développement FiveM</h1>
-        <p id="heroSub">Scripts ESX / Standalone, optimisation, UI, logs Discord… Un serveur propre, stable et pro.</p>
-        <div class="pill"><span class="dot"></span><span id="heroPill">ESX / Standalone (pas de QBCore)</span></div>
-      </div>
-    </div>
+<div class="brand">
+Enzo Dev — FiveM & Discord
+</div>
 
-    <!-- FIVEM -->
-    <section class="section active" id="fivem">
-      <div class="inner">
-        <div class="grid">
-          <div class="card">
-            <h3>Scripts & Features</h3>
-            <p>Jobs, menus, UI, garages, inventaires, crafting, shops, housing… (ESX / standalone)</p>
-          </div>
-          <div class="card">
-            <h3>Optimisation & Fix</h3>
-            <p>Réduction du ms, correction erreurs, stabilité, nettoyage DB, scripts plus légers.</p>
-          </div>
-          <div class="card">
-            <h3>Logs & Sécurité</h3>
-            <p>Logs Discord, anti-abus basique, events sécurisés, protections et alertes.</p>
-          </div>
-        </div>
+<div class="tabs">
+<div class="tab active" onclick="show('fivem')">FiveM</div>
+<div class="tab" onclick="show('discord')">Discord</div>
+<div class="tab" onclick="show('avis')">Avis</div>
+</div>
 
-        <div class="row">
-          <a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank" rel="noreferrer">💬 Me contacter sur Discord</a>
-          <button class="btn secondary" onclick="goAvis()">⭐ Donner un avis</button>
-        </div>
-      </div>
-    </section>
+<a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank">
+Me contacter
+</a>
 
-    <!-- DISCORD -->
-    <section class="section" id="discord">
-      <div class="inner">
-        <div class="grid">
-          <div class="card">
-            <h3>Bot Tickets</h3>
-            <p>Tickets, transcripts, logs, assign staff, catégories, permissions propres.</p>
-          </div>
-          <div class="card">
-            <h3>Rôles & Automations</h3>
-            <p>Rôles auto, onboarding, vérification, boutons, panneaux staff, logs.</p>
-          </div>
-          <div class="card">
-            <h3>Anti-raid</h3>
-            <p>Anti-spam, protections, alertes, restrictions, sécurité basique et configuration.</p>
-          </div>
-        </div>
+</div>
 
-        <div class="row">
-          <a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank" rel="noreferrer">💬 Me contacter sur Discord</a>
-          <button class="btn secondary" onclick="goAvis()">⭐ Donner un avis</button>
-        </div>
-      </div>
-    </section>
 
-    <!-- AVIS -->
-    <section class="section" id="avis">
-      <div class="inner">
-        <div class="card">
-          <h3 style="margin:0 0 10px">Donner un avis</h3>
-          <p style="margin:0 0 14px;color:var(--muted)">
-            Les avis sont enregistrés et visibles sur le site (sur le navigateur).
-          </p>
+<div class="banner">
 
-          <div class="two">
-            <div>
-              <label style="display:block;margin-bottom:8px;color:var(--muted);font-weight:700">Ta note</label>
-              <div class="stars" id="stars">
-                <span class="star" data-v="1">⭐</span>
-                <span class="star" data-v="2">⭐</span>
-                <span class="star" data-v="3">⭐</span>
-                <span class="star" data-v="4">⭐</span>
-                <span class="star" data-v="5">⭐</span>
-                <span style="color:var(--muted);font-weight:800" id="noteTxt">(0/5)</span>
-              </div>
-            </div>
+<h1 id="title">
+Développement FiveM
+</h1>
 
-            <div>
-              <label style="display:block;margin-bottom:8px;color:var(--muted);font-weight:700">Ton pseudo</label>
-              <input class="input" id="pseudo" placeholder="Ex: ton pseudo" />
-            </div>
-          </div>
+<p id="desc">
+Scripts ESX / Standalone, optimisation, UI, logs Discord.
+</p>
 
-          <div style="margin-top:12px">
-            <label style="display:block;margin-bottom:8px;color:var(--muted);font-weight:700">Message</label>
-            <textarea id="msg" placeholder="Ex: Très rapide, travail propre, je recommande !"></textarea>
-          </div>
+</div>
 
-          <div class="row">
-            <button class="btn" onclick="addAvis()">Publier l’avis</button>
-            <button class="btn secondary" onclick="openDiscord()">Ouvrir Discord</button>
-            <button class="btn danger" onclick="clearAvis()">Supprimer mes avis (local)</button>
-          </div>
-        </div>
 
-        <div class="card" style="margin-top:14px">
-          <h3 style="margin:0 0 10px">Avis publiés</h3>
-          <div id="reviews" class="reviews"></div>
-          <p id="noReviews" style="margin:0;color:var(--muted)">Aucun avis pour le moment.</p>
-        </div>
-      </div>
-    </section>
+<!-- FIVEM -->
 
-    <footer>
-      © <span id="year"></span> Enzo Dev — FiveM & Discord
-    </footer>
-  </div>
+<div class="section active" id="fivem">
 
-  <div class="toast" id="toast"></div>
+<div class="grid">
 
-  <script>
-    const DISCORD_INVITE = "https://discord.gg/FXF3v4YRRr";
-    const STORAGE_KEY = "enzo_dev_reviews_v1";
+<div class="card">
+<h3>Scripts</h3>
+<p>Jobs, inventaires, UI, systèmes RP.</p>
+</div>
 
-    const tabs = document.querySelectorAll(".tab");
-    const sections = document.querySelectorAll(".section");
-    const heroTitle = document.getElementById("heroTitle");
-    const heroSub = document.getElementById("heroSub");
-    const heroPill = document.getElementById("heroPill");
+<div class="card">
+<h3>Optimisation</h3>
+<p>Réduction ms serveur, fix erreurs.</p>
+</div>
 
-    function setActive(targetId){
-      tabs.forEach(t => t.classList.toggle("active", t.dataset.target === targetId));
-      sections.forEach(s => s.classList.toggle("active", s.id === targetId));
+<div class="card">
+<h3>Logs</h3>
+<p>Logs Discord, sécurité events.</p>
+</div>
 
-      if(targetId === "fivem"){
-        heroTitle.textContent = "Développement FiveM";
-        heroSub.textContent = "Scripts ESX / Standalone, optimisation, UI, logs Discord… Un serveur propre, stable et pro.";
-        heroPill.textContent = "ESX / Standalone (pas de QBCore)";
-      } else if(targetId === "discord"){
-        heroTitle.textContent = "Développement Discord";
-        heroSub.textContent = "Bots, tickets, rôles automatiques, anti-raid… pour un Discord pro et clean.";
-        heroPill.textContent = "Discord.js / Python";
-      } else {
-        heroTitle.textContent = "Avis & retours";
-        heroSub.textContent = "Une note et un message, ça m’aide énormément. Merci 🙏";
-        heroPill.textContent = "⭐ Avis visibles sur le site";
-      }
-      window.scrollTo({top: 0, behavior: "smooth"});
-    }
+</div>
 
-    tabs.forEach(tab => tab.addEventListener("click", () => setActive(tab.dataset.target)));
-    function goAvis(){ setActive("avis"); }
-    function openDiscord(){ window.open(DISCORD_INVITE, "_blank", "noreferrer"); }
+</div>
 
-    document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Stars
-    let note = 0;
-    const noteTxt = document.getElementById("noteTxt");
-    const starEls = document.querySelectorAll(".star");
-    function updateStars(){
-      starEls.forEach(s => s.classList.toggle("active", Number(s.dataset.v) <= note));
-      noteTxt.textContent = `(${note}/5)`;
-    }
-    starEls.forEach(s => s.addEventListener("click", () => { note = Number(s.dataset.v); updateStars(); }));
+<!-- DISCORD -->
 
-    // Storage
-    function loadReviews(){
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        const arr = raw ? JSON.parse(raw) : [];
-        return Array.isArray(arr) ? arr : [];
-      }catch(e){ return []; }
-    }
-    function saveReviews(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
+<div class="section" id="discord">
 
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
+<div class="grid">
 
-    function renderReviews(){
-      const reviewsEl = document.getElementById("reviews");
-      const noEl = document.getElementById("noReviews");
+<div class="card">
+<h3>Bots</h3>
+<p>Bots tickets, logs, modération.</p>
+</div>
 
-      const data = loadReviews().sort((a,b) => b.ts - a.ts);
-      reviewsEl.innerHTML = "";
+<div class="card">
+<h3>Automations</h3>
+<p>Rôles auto, onboarding, boutons.</p>
+</div>
 
-      if(!data.length){
-        noEl.style.display = "block";
-        return;
-      }
-      noEl.style.display = "none";
+<div class="card">
+<h3>Anti-raid</h3>
+<p>Protection spam, sécurité serveur.</p>
+</div>
 
-      for(const r of data){
-        const stars = "⭐".repeat(r.note) + "☆".repeat(5 - r.note);
-        const date = new Date(r.ts).toLocaleString("fr-FR");
-        const div = document.createElement("div");
-        div.className = "review";
-        div.innerHTML = `
-          <div class="review-top">
-            <div><b>${escapeHtml(r.pseudo)}</b> <small>• ${escapeHtml(date)}</small></div>
-            <div class="r-stars">${stars}</div>
-          </div>
-          <p>${escapeHtml(r.msg)}</p>
-        `;
-        reviewsEl.appendChild(div);
-      }
-    }
+</div>
 
-    function toast(text){
-      const el = document.getElementById("toast");
-      el.textContent = text;
-      el.style.display = "block";
-      clearTimeout(window.__t);
-      window.__t = setTimeout(() => el.style.display = "none", 4500);
-    }
+</div>
 
-    function addAvis(){
-      const pseudo = (document.getElementById("pseudo").value || "").trim() || "Anonyme";
-      const msg = (document.getElementById("msg").value || "").trim();
 
-      if(note < 1){ toast("❌ Mets une note (1 à 5 étoiles)."); return; }
-      if(msg.length < 3){ toast("❌ Écris un petit message (au moins 3 caractères)."); return; }
+<!-- AVIS -->
 
-      const arr = loadReviews();
-      arr.push({ pseudo, msg, note, ts: Date.now() });
-      saveReviews(arr);
+<div class="section" id="avis">
 
-      document.getElementById("pseudo").value = "";
-      document.getElementById("msg").value = "";
-      note = 0; updateStars();
+<input id="pseudo" placeholder="Pseudo">
 
-      renderReviews();
-      toast("✅ Avis publié ! (il reste sur le site)");
-    }
+<textarea id="msg" placeholder="Ton avis"></textarea>
 
-    function clearAvis(){
-      localStorage.removeItem(STORAGE_KEY);
-      renderReviews();
-      toast("🗑️ Avis supprimés (sur ce navigateur).");
-    }
+<button class="btn" onclick="addReview()">Publier</button>
 
-    renderReviews();
-    updateStars();
-  </script>
+<div id="reviews"></div>
+
+</div>
+
+
+</div>
+
+<script>
+
+function show(section){
+
+document.querySelectorAll(".section")
+.forEach(s=>s.classList.remove("active"))
+
+document.getElementById(section)
+.classList.add("active")
+
+document.querySelectorAll(".tab")
+.forEach(t=>t.classList.remove("active"))
+
+event.target.classList.add("active")
+
+/* changer fond */
+
+if(section=="fivem"){
+
+document.body.style.backgroundImage=
+"linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)), url('fivem-logo.png')"
+
+title.innerText="Développement FiveM"
+
+desc.innerText="Scripts ESX / Standalone, optimisation, UI."
+
+}
+
+if(section=="discord"){
+
+document.body.style.backgroundImage=
+"linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)), url('discord-logo.png')"
+
+title.innerText="Développement Discord"
+
+desc.innerText="Bots, tickets, rôles automatiques."
+
+}
+
+if(section=="avis"){
+
+document.body.style.backgroundImage=
+"linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)), url('discord-logo.png')"
+
+title.innerText="Avis"
+
+desc.innerText="Les avis restent sur le site."
+
+}
+
+}
+
+/* avis */
+
+function addReview(){
+
+let pseudo=document.getElementById("pseudo").value
+let msg=document.getElementById("msg").value
+
+let div=document.createElement("div")
+
+div.className="review"
+
+div.innerHTML="<b>"+pseudo+"</b><p>"+msg+"</p>"
+
+document.getElementById("reviews").appendChild(div)
+
+}
+
+</script>
+
 </body>
 </html>
