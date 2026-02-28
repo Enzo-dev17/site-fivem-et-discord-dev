@@ -516,7 +516,6 @@
     const user = session.user;
     const identity = user.identities?.find(i => i.provider === "discord");
 
-    // selon ce que discord renvoie
     const username =
       identity?.identity_data?.global_name ||
       identity?.identity_data?.full_name ||
@@ -548,7 +547,6 @@
     logoutBtn.style.display = "inline-flex";
     form.style.display = "block";
 
-    // check admin
     const uid = meInfo.user.id;
     const res = await supabase.from("admins").select("user_id").eq("user_id", uid).maybeSingle();
     const isAdmin = !!res.data;
@@ -602,7 +600,6 @@
       list.appendChild(div);
     }
 
-    // bind delete buttons
     list.querySelectorAll("button[data-del]").forEach(btn => {
       btn.addEventListener("click", async () => {
         const id = Number(btn.getAttribute("data-del"));
@@ -617,7 +614,8 @@
   loginBtn.addEventListener("click", async () => {
     await supabase.auth.signInWithOAuth({
       provider: "discord",
-      options: { redirectTo: window.location.origin }
+      // ✅ IMPORTANT : renvoie vers la bonne page GitHub Pages (avec /site-fivem-et-discord-dev/)
+      options: { redirectTo: window.location.href.split("#")[0] }
     });
   });
 
@@ -662,13 +660,11 @@
     await loadReviews();
   });
 
-  // refresh auto
   supabase.auth.onAuthStateChange(async () => {
     await refreshSession();
     await loadReviews();
   });
 
-  // init
   await refreshSession();
   await loadReviews();
 </script>
