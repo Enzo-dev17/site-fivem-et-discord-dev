@@ -195,6 +195,11 @@
     .stars{letter-spacing:2px}
     .review p{margin-top:8px;color:rgba(255,255,255,.86);line-height:1.6}
 
+    /* Stars picker */
+    #stars{font-size:28px;cursor:pointer;user-select:none}
+    #stars span{transition:.12s ease}
+    #stars span:hover{transform:translateY(-1px)}
+
     /* SPLASH */
     .splash{
       position:fixed; inset:0; z-index:9999;
@@ -386,8 +391,15 @@
       <div id="form" style="display:none;margin-top:14px">
         <div class="card">
           <h3 style="margin-bottom:10px">Publier un avis</h3>
-          <label class="muted">Note (1 à 5)</label>
-          <input id="rating" type="number" min="1" max="5" value="5"/>
+
+          <label class="muted">Note</label>
+          <div id="stars">
+            <span data-v="1">⭐</span>
+            <span data-v="2">⭐</span>
+            <span data-v="3">⭐</span>
+            <span data-v="4">⭐</span>
+            <span data-v="5">⭐</span>
+          </div>
 
           <label class="muted" style="display:block;margin-top:10px">Message</label>
           <textarea id="message" placeholder="Ton avis..."></textarea>
@@ -483,7 +495,6 @@
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  // ✅ tes infos
   const SUPABASE_URL = "https://xbqvikovspdkxbncnhlq.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhicXZpa292c3Bka3hibmNuaGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNjMxODMsImV4cCI6MjA4NzgzOTE4M30.mQYqFRgoVXcycRb_27ywHpUpo4qfX9gT2zVddepMI1Q";
 
@@ -496,9 +507,24 @@
   const list = document.getElementById("list");
   const adminHint = document.getElementById("adminHint");
 
-  const ratingEl = document.getElementById("rating");
   const messageEl = document.getElementById("message");
   const sendBtn = document.getElementById("sendBtn");
+
+  // ⭐ stars picker
+  let ratingValue = 5;
+  const stars = document.querySelectorAll("#stars span");
+  function paintStars(v){
+    stars.forEach(s=>{
+      s.style.opacity = (Number(s.dataset.v) <= v) ? "1" : "0.3";
+    });
+  }
+  stars.forEach(s=>{
+    s.addEventListener("click", ()=>{
+      ratingValue = Number(s.dataset.v);
+      paintStars(ratingValue);
+    });
+  });
+  paintStars(5);
 
   function escapeHtml(str){
     return String(str)
@@ -574,7 +600,7 @@
     }
 
     for(const r of data){
-      const stars = "⭐".repeat(r.rating) + "☆".repeat(5 - r.rating);
+      const starsTxt = "⭐".repeat(r.rating) + "☆".repeat(5 - r.rating);
       const d = new Date(r.created_at).toLocaleString("fr-FR");
 
       const div = document.createElement("div");
@@ -588,7 +614,7 @@
               <div class="muted" style="font-size:12px">${escapeHtml(d)}</div>
             </div>
           </div>
-          <div class="stars">${stars}</div>
+          <div class="stars">${starsTxt}</div>
         </div>
         <p>${escapeHtml(r.message)}</p>
         ${
@@ -614,7 +640,6 @@
   loginBtn.addEventListener("click", async () => {
     await supabase.auth.signInWithOAuth({
       provider: "discord",
-      // ✅ IMPORTANT : renvoie vers la bonne page GitHub Pages (avec /site-fivem-et-discord-dev/)
       options: { redirectTo: window.location.href.split("#")[0] }
     });
   });
@@ -632,7 +657,7 @@
       return;
     }
 
-    const rating = Math.max(1, Math.min(5, Number(ratingEl.value || 5)));
+    const rating = ratingValue;
     const message = (messageEl.value || "").trim();
 
     if(message.length < 3){
@@ -656,7 +681,8 @@
     }
 
     messageEl.value = "";
-    ratingEl.value = "5";
+    ratingValue = 5;
+    paintStars(5);
     await loadReviews();
   });
 
