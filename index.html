@@ -19,6 +19,7 @@
       --radius:16px;
       --shadow:0 12px 30px rgba(0,0,0,.35);
     }
+
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
     body{
@@ -138,7 +139,7 @@
     }
     .dot{width:8px;height:8px;border-radius:999px;background:var(--ok)}
 
-    /* SECTIONS + watermark per category */
+    /* SECTIONS + watermark per category (FIXED) */
     section{padding:16px 0}
     .section{
       display:none;
@@ -147,20 +148,41 @@
       border-radius:22px;
     }
     .section.active{display:block}
+
+    /* Watermark base */
     .section::before{
       content:"";
       position:absolute;
-      inset:-40px;
+      top:50%;
+      right:40px;
+      transform:translateY(-50%);
       background-repeat:no-repeat;
-      background-position: right 40px center;
-      background-size: 380px;
-      opacity:.10;
+      background-position:center;
       pointer-events:none;
-      transform: rotate(-8deg);
+      opacity:0.08;           /* plus discret */
+      filter: blur(.2px);
     }
-    #fivem::before{ background-image:url("fivem-logo.png"); }
-    #discord::before{ background-image:url("discord-logo.png"); }
-    #avis::before{ background-image:url("discord-logo.png"); opacity:.06; }
+
+    /* Logos */
+    #fivem::before{
+      background-image:url("fivem-logo.png");
+      background-size:220px;
+      width:220px;
+      height:220px;
+    }
+    #discord::before{
+      background-image:url("discord-logo.png");
+      background-size:260px;
+      width:260px;
+      height:260px;
+    }
+    #avis::before{
+      background-image:url("discord-logo.png");
+      background-size:240px;
+      width:240px;
+      height:240px;
+      opacity:0.06;
+    }
 
     .inner{
       position:relative;
