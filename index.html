@@ -14,14 +14,11 @@
       --accent2:#8b5cf6;
       --line:rgba(255,255,255,.10);
       --muted:rgba(255,255,255,.72);
-      --card:rgba(255,255,255,.06);
-      --card2:rgba(0,0,0,.35);
       --shadow:0 22px 70px rgba(0,0,0,.55);
       --shadow2:0 16px 40px rgba(0,0,0,.45);
       --radius:22px;
       --radius2:16px;
     }
-
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
     body{
@@ -29,8 +26,6 @@
       color:#fff;
       min-height:100vh;
       overflow-x:hidden;
-
-      /* ✅ fond écran entier + overlay */
       background:
         radial-gradient(900px 520px at 18% 12%, rgba(88,101,242,.20), transparent 60%),
         radial-gradient(900px 520px at 82% 10%, rgba(139,92,246,.18), transparent 60%),
@@ -38,8 +33,7 @@
         linear-gradient(180deg, var(--bg1), var(--bg0));
       position:relative;
     }
-
-    /* Image de fond “par catégorie” = ajoutée via JS sur ::before */
+    /* image full-screen par catégorie */
     body::before{
       content:"";
       position:fixed; inset:0;
@@ -53,8 +47,6 @@
       z-index:-2;
       transition:.35s ease;
     }
-
-    /* voile sombre */
     body::after{
       content:"";
       position:fixed; inset:0;
@@ -76,11 +68,7 @@
     .nav{
       display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
     }
-    .brand{
-      display:flex;align-items:center;gap:10px;
-      font-weight:900;
-      letter-spacing:.2px;
-    }
+    .brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.2px}
     .badge{
       width:36px;height:36px;border-radius:12px;
       background:linear-gradient(135deg,#f59e0b,var(--accent));
@@ -126,7 +114,7 @@
       box-shadow:none;
     }
 
-    /* ✅ Bloc central comme ton screen */
+    /* Bloc central */
     .stage{
       margin-top:18px;
       border-radius:var(--radius);
@@ -137,7 +125,7 @@
       overflow:hidden;
     }
 
-    /* Hero / Banner dans le bloc */
+    /* Hero dans le bloc */
     .hero{
       position:relative;
       border-bottom:1px solid var(--line);
@@ -167,13 +155,8 @@
     .section{display:none}
     .section.active{display:block}
 
-    .grid{
-      display:grid;gap:12px;
-      margin-top:12px;
-    }
-    @media (min-width:900px){
-      .grid{grid-template-columns:1fr 1fr 1fr}
-    }
+    .grid{display:grid;gap:12px;margin-top:12px}
+    @media (min-width:900px){ .grid{grid-template-columns:1fr 1fr 1fr} }
 
     .card{
       border-radius:var(--radius2);
@@ -187,10 +170,7 @@
     .card h3{margin-bottom:8px}
     .card p{color:rgba(255,255,255,.82);line-height:1.6}
 
-    .actions{
-      margin-top:12px;
-      display:flex;gap:10px;flex-wrap:wrap;
-    }
+    .actions{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
 
     /* Avis */
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
@@ -207,7 +187,6 @@
       outline:none;
       font-family:inherit;
     }
-
     .reviews{margin-top:12px;display:grid;gap:12px}
     .review{
       border-radius:16px;
@@ -220,17 +199,13 @@
     .avatar{width:36px;height:36px;border-radius:999px;object-fit:cover;border:1px solid rgba(255,255,255,.15)}
     .stars{letter-spacing:2px}
     .review p{margin-top:8px;color:rgba(255,255,255,.86);line-height:1.6}
+    .review-actions{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap}
 
     #stars{font-size:28px;cursor:pointer;user-select:none}
     #stars span{transition:.12s ease;opacity:.3}
     #stars span:hover{transform:translateY(-1px);opacity:1}
 
-    footer{
-      margin-top:14px;
-      color:rgba(255,255,255,.70);
-      text-align:left;
-      padding:14px 2px 30px;
-    }
+    footer{margin-top:14px;color:rgba(255,255,255,.70);text-align:left;padding:14px 2px 30px}
   </style>
 </head>
 
@@ -246,10 +221,11 @@
         </div>
       </div>
 
-      <!-- ✅ catégories en haut, Bienvenue en premier -->
+      <!-- ✅ catégories en haut (Bienvenue, FiveM, NOUVELLE, Discord, Avis) -->
       <div class="tabs">
         <div class="tab active" data-id="bienvenue" onclick="show('bienvenue', this)">👋 Bienvenue</div>
         <div class="tab" data-id="fivem" onclick="show('fivem', this)">🎮 FiveM</div>
+        <div class="tab" data-id="services" onclick="show('services', this)">📌 Services</div>
         <div class="tab" data-id="discord" onclick="show('discord', this)">💬 Discord</div>
         <div class="tab" data-id="avis" onclick="show('avis', this)">⭐ Avis</div>
       </div>
@@ -260,8 +236,6 @@
 
   <div class="wrap">
     <div class="stage">
-
-      <!-- Hero / banner -->
       <div class="hero">
         <div>
           <h1 id="heroTitle">Bienvenue</h1>
@@ -280,18 +254,18 @@
               <p>Scripts ESX / Standalone, UI, optimisation, logs, stabilité. (pas de QBCore)</p>
             </div>
             <div class="card">
-              <h3>💬 Discord</h3>
-              <p>Bots tickets, rôles automatiques, anti-raid, logs & configuration propre.</p>
+              <h3>📌 Services</h3>
+              <p>Pack starter, maintenance, commandes sur mesure (FiveM & Discord).</p>
             </div>
             <div class="card">
-              <h3>⭐ Avis</h3>
-              <p>Avis visibles par tous. Connexion Discord uniquement pour publier un avis.</p>
+              <h3>💬 Discord</h3>
+              <p>Bots tickets, rôles automatiques, anti-raid, logs & configuration propre.</p>
             </div>
           </div>
 
           <div class="actions">
             <button class="btn" onclick="show('fivem')">🎮 Aller sur FiveM</button>
-            <button class="btn secondary" onclick="show('discord')">💬 Aller sur Discord</button>
+            <button class="btn secondary" onclick="show('services')">📌 Voir Services</button>
             <button class="btn secondary" onclick="show('avis')">⭐ Voir les avis</button>
           </div>
         </div>
@@ -316,6 +290,29 @@
           <div class="actions">
             <a class="btn" id="discordBtn1" href="#" target="_blank" rel="noreferrer">💬 Me contacter sur Discord</a>
             <button class="btn secondary" onclick="show('avis')">⭐ Donner un avis</button>
+          </div>
+        </div>
+
+        <!-- ✅ SERVICES (entre FiveM et Discord) -->
+        <div class="section" id="services">
+          <div class="grid">
+            <div class="card">
+              <h3>📦 Pack Starter</h3>
+              <p>Setup complet de base (config, optimisation, sécurité). Idéal pour démarrer propre.</p>
+            </div>
+            <div class="card">
+              <h3>🛠️ Maintenance</h3>
+              <p>Fix bugs, optimisation, ajouts de features, améliorations régulières.</p>
+            </div>
+            <div class="card">
+              <h3>⚡ Sur mesure</h3>
+              <p>Tu expliques ton idée → je développe un script / bot propre et stable.</p>
+            </div>
+          </div>
+
+          <div class="actions">
+            <a class="btn" id="discordBtnS" href="#" target="_blank" rel="noreferrer">💬 Me contacter</a>
+            <button class="btn secondary" onclick="show('avis')">⭐ Voir les avis</button>
           </div>
         </div>
 
@@ -355,10 +352,10 @@
             </div>
           </div>
 
-          <!-- Form (seulement si connecté) -->
+          <!-- Form -->
           <div id="form" style="display:none;margin-top:14px">
             <div class="card">
-              <h3 style="margin-bottom:10px">Publier un avis</h3>
+              <h3 style="margin-bottom:10px" id="formTitle">Publier un avis</h3>
 
               <label class="muted">Note</label>
               <div id="stars" style="margin-top:6px">
@@ -373,7 +370,10 @@
               <textarea id="message" placeholder="Ton avis..."></textarea>
 
               <div class="row" style="margin-top:10px">
-                <button id="sendBtn" class="btn">Publier</button>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                  <button id="sendBtn" class="btn">Publier</button>
+                  <button id="cancelEditBtn" class="btn secondary" style="display:none">Annuler</button>
+                </div>
                 <div class="muted" style="font-size:13px" id="adminHint"></div>
               </div>
             </div>
@@ -395,31 +395,31 @@
   </div>
 
   <script>
-    // ✅ CONFIG
     const CONFIG = {
       discordInvite: "https://discord.gg/FXF3v4YRRr",
       backgrounds: {
         bienvenue: "banner.png",
         fivem: "fivem-logo.png",
+        services: "banner.png",
         discord: "discord-logo.png",
         avis: "banner.png"
       }
     };
 
-    // liens
     document.getElementById("contactBtn").href = CONFIG.discordInvite;
     document.getElementById("discordBtn1").href = CONFIG.discordInvite;
     document.getElementById("discordBtn2").href = CONFIG.discordInvite;
+    document.getElementById("discordBtnS").href = CONFIG.discordInvite;
 
     const heroTitle = document.getElementById("heroTitle");
     const heroDesc  = document.getElementById("heroDesc");
     const heroPill  = document.getElementById("heroPill");
 
+    const bgStyle = document.createElement("style");
+    document.head.appendChild(bgStyle);
+
     function setBg(section){
-      const img = CONFIG.backgrounds[section] || CONFIG.backgrounds.bienvenue;
-      // change le fond du body::before
-      document.body.style.setProperty("--bg-image", `url("${img}")`);
-      // hack: on modifie directement le style du pseudo via une classe (on le fait en JS en injectant un style)
+      const img = (CONFIG.backgrounds[section] || CONFIG.backgrounds.bienvenue);
       bgStyle.textContent = `body::before{background:
         linear-gradient(rgba(0,0,0,.68),rgba(0,0,0,.78)),
         url("${img}");
@@ -435,14 +435,19 @@
         heroDesc.textContent="Scripts ESX / Standalone, optimisation, UI, logs Discord… Un serveur propre, stable et pro.";
         heroPill.textContent="ESX / Standalone (pas de QBCore)";
       }
+      if(section==="services"){
+        heroTitle.textContent="Services";
+        heroDesc.textContent="Pack starter, maintenance, commande sur mesure (FiveM & Discord).";
+        heroPill.textContent="Support & développement";
+      }
       if(section==="discord"){
         heroTitle.textContent="Développement Discord";
         heroDesc.textContent="Bots, tickets, rôles automatiques, anti-raid… pour un Discord propre et clean.";
-        heroPill.textContent="Discord (bots / config / sécurité)";
+        heroPill.textContent="Bots / config / sécurité";
       }
       if(section==="avis"){
         heroTitle.textContent="Avis & retours";
-        heroDesc.textContent="Les avis sont visibles par tous. Connecte-toi uniquement pour publier.";
+        heroDesc.textContent="Les avis sont visibles par tous. Connecte-toi uniquement pour publier ou modifier ton avis.";
         heroPill.textContent="Avis publics";
       }
     }
@@ -462,21 +467,16 @@
       window.scrollTo({top:0,behavior:"smooth"});
     }
 
-    // injection style pour pseudo-element
-    const bgStyle = document.createElement("style");
-    document.head.appendChild(bgStyle);
-
     (function init(){
       document.getElementById("year").textContent = new Date().getFullYear();
       setBg("bienvenue");
     })();
   </script>
 
-  <!-- Supabase + Discord OAuth + Reviews -->
+  <!-- Supabase + Discord OAuth + Reviews (edit possible) -->
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-    // ✅ Mets ta clé ici (anon public key)
     const SUPABASE_URL = "https://xbqvikovspdkxbncnhlq.supabase.co";
     const SUPABASE_ANON_KEY = "COLLE_TA_CLE_ANON_ICI";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -488,8 +488,10 @@
     const list = document.getElementById("list");
     const adminHint = document.getElementById("adminHint");
 
+    const formTitle = document.getElementById("formTitle");
     const messageEl = document.getElementById("message");
     const sendBtn = document.getElementById("sendBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
 
     // ⭐ stars picker
     let ratingValue = 5;
@@ -515,6 +517,34 @@
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
     }
+
+    // ✅ mode édition
+    let editingId = null; // id de l'avis en cours de modif
+
+    function setEditMode(on, review){
+      if(!on){
+        editingId = null;
+        formTitle.textContent = "Publier un avis";
+        sendBtn.textContent = "Publier";
+        cancelEditBtn.style.display = "none";
+        messageEl.value = "";
+        ratingValue = 5;
+        paintStars(5);
+        return;
+      }
+
+      editingId = review.id;
+      formTitle.textContent = "Modifier ton avis";
+      sendBtn.textContent = "Mettre à jour";
+      cancelEditBtn.style.display = "inline-flex";
+      messageEl.value = review.message || "";
+      ratingValue = Number(review.rating || 5);
+      paintStars(ratingValue);
+      // scroll vers le formulaire
+      form.scrollIntoView({ behavior:"smooth", block:"start" });
+    }
+
+    cancelEditBtn.addEventListener("click", () => setEditMode(false));
 
     async function getMe(){
       const { data: { session } } = await supabase.auth.getSession();
@@ -543,15 +573,16 @@
 
       // ✅ Avis visibles sans connexion
       if(!meInfo){
-        me.textContent = "Tu peux lire les avis sans connexion. Connecte-toi seulement pour publier.";
+        me.textContent = "Tu peux lire les avis sans connexion. Connecte-toi seulement pour publier/modifier ton avis.";
         loginBtn.style.display = "inline-flex";
         logoutBtn.style.display = "none";
         form.style.display = "none";
         adminHint.textContent = "";
-        return { logged:false, isAdmin:false };
+        setEditMode(false);
+        return { logged:false, isAdmin:false, myUserId:null };
       }
 
-      me.innerHTML = `Connecté en <b>${escapeHtml(meInfo.username)}</b> — tu peux publier un avis.`;
+      me.innerHTML = `Connecté en <b>${escapeHtml(meInfo.username)}</b> — tu peux publier et modifier ton avis.`;
       loginBtn.style.display = "none";
       logoutBtn.style.display = "inline-flex";
       form.style.display = "block";
@@ -561,7 +592,7 @@
       const res = await supabase.from("admins").select("user_id").eq("user_id", uid).maybeSingle();
       const isAdmin = !!res.data;
       adminHint.textContent = isAdmin ? "Mode admin : tu peux supprimer des avis." : "";
-      return { logged:true, isAdmin, ...meInfo };
+      return { logged:true, isAdmin, myUserId: uid, ...meInfo };
     }
 
     async function loadReviews(){
@@ -576,8 +607,8 @@
       }
 
       const sessionState = await refreshSession();
-
       list.innerHTML = "";
+
       if(!data?.length){
         list.innerHTML = `<div class="muted">Aucun avis pour le moment.</div>`;
         return;
@@ -586,6 +617,8 @@
       for(const r of data){
         const starsTxt = "⭐".repeat(r.rating) + "☆".repeat(5 - r.rating);
         const d = new Date(r.created_at).toLocaleString("fr-FR");
+
+        const isMine = sessionState.logged && (r.user_id === sessionState.myUserId);
 
         const div = document.createElement("div");
         div.className = "review";
@@ -601,16 +634,33 @@
             <div class="stars">${starsTxt}</div>
           </div>
           <p>${escapeHtml(r.message)}</p>
-          ${
-            sessionState.isAdmin
-            ? `<div style="margin-top:10px"><button class="btn danger" data-del="${r.id}">Supprimer</button></div>`
-            : ``
-          }
+
+          <div class="review-actions">
+            ${
+              isMine
+              ? `<button class="btn secondary" data-edit="${r.id}">✏️ Modifier</button>`
+              : ``
+            }
+            ${
+              sessionState.isAdmin
+              ? `<button class="btn danger" data-del="${r.id}">Supprimer</button>`
+              : ``
+            }
+          </div>
         `;
         list.appendChild(div);
       }
 
-      // delete (admin only)
+      // edit (owner)
+      list.querySelectorAll("button[data-edit]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.getAttribute("data-edit"));
+          const review = data.find(x => x.id === id);
+          if(review) setEditMode(true, review);
+        });
+      });
+
+      // delete (admin)
       list.querySelectorAll("button[data-del]").forEach(btn => {
         btn.addEventListener("click", async () => {
           const id = Number(btn.getAttribute("data-del"));
@@ -631,6 +681,7 @@
 
     logoutBtn.addEventListener("click", async () => {
       await supabase.auth.signOut();
+      setEditMode(false);
       await refreshSession();
       await loadReviews();
     });
@@ -638,19 +689,42 @@
     sendBtn?.addEventListener("click", async () => {
       const meInfo = await getMe();
       if(!meInfo){
-        alert("Connecte-toi avec Discord d’abord pour publier.");
+        alert("Connecte-toi avec Discord d’abord.");
         return;
       }
 
       const rating = ratingValue;
       const message = (messageEl.value || "").trim();
-
       if(message.length < 3){
         alert("Écris un message (au moins 3 caractères).");
         return;
       }
 
       const { user, username, avatar } = meInfo;
+
+      // ✅ UPDATE si édition, sinon INSERT
+      if(editingId){
+        const { error } = await supabase
+          .from("reviews")
+          .update({
+            rating,
+            message,
+            // on garde ton pseudo/avatar à jour si tu changes de compte Discord
+            discord_username: username,
+            discord_avatar_url: avatar
+          })
+          .eq("id", editingId)
+          .eq("user_id", user.id); // sécurité côté client
+
+        if(error){
+          alert("Erreur update: " + error.message);
+          return;
+        }
+
+        setEditMode(false);
+        await loadReviews();
+        return;
+      }
 
       const { error } = await supabase.from("reviews").insert({
         user_id: user.id,
@@ -665,13 +739,12 @@
         return;
       }
 
-      messageEl.value = "";
-      ratingValue = 5;
-      paintStars(5);
+      setEditMode(false);
       await loadReviews();
     });
 
     supabase.auth.onAuthStateChange(async () => {
+      setEditMode(false);
       await refreshSession();
       await loadReviews();
     });
