@@ -1,39 +1,207 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Enzo Dev FiveM</title>
-<style>
-body{
-background:#0f172a;
-color:white;
-font-family:Arial;
-text-align:center;
-padding-top:100px;
-}
-h1{
-font-size:50px;
-}
-button{
-background:#5865F2;
-border:none;
-padding:15px 30px;
-color:white;
-font-size:18px;
-border-radius:10px;
-cursor:pointer;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Enzo Dev — FiveM & Discord</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --card:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.12);
+      --text:#ffffff;
+      --muted:rgba(255,255,255,.7);
+      --accent:#5865F2;
+      --accent2:#22c55e;
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: radial-gradient(900px 500px at 15% 10%, rgba(88,101,242,.25), transparent 55%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(34,197,94,.18), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      font-family:Arial, sans-serif;
+    }
+    .container{max-width:1000px;margin:0 auto;padding:22px}
+    .top{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      padding:14px 0 10px;border-bottom:1px solid var(--line);
+    }
+    .brand{font-weight:800;font-size:20px}
+    .brand span{color:var(--muted);font-weight:600}
+    .tabs{
+      display:flex;gap:10px;flex-wrap:wrap;
+    }
+    .tab{
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.15);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      transition:.15s ease;
+      user-select:none;
+      font-weight:700;
+    }
+    .tab:hover{transform:translateY(-1px);background:rgba(255,255,255,.08)}
+    .tab.active{
+      border:none;
+      background:linear-gradient(135deg,var(--accent),#7c3aed);
+      box-shadow:0 12px 30px rgba(0,0,0,.35);
+    }
+
+    .hero{padding:26px 0 10px}
+    h1{margin:0 0 10px;font-size:42px}
+    .subtitle{margin:0;color:var(--muted);line-height:1.6}
+
+    .grid{display:grid;gap:14px;margin-top:16px}
+    @media (min-width:900px){ .grid{grid-template-columns:1fr 1fr 1fr} }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:16px;
+    }
+    .card h3{margin:0 0 8px}
+    .card p{margin:0;color:var(--muted);line-height:1.6}
+    .btn{
+      display:inline-block;margin-top:12px;
+      background:var(--accent);
+      border:none;color:white;
+      padding:12px 16px;
+      border-radius:12px;
+      cursor:pointer;
+      text-decoration:none;
+      font-weight:800;
+    }
+    .btn.secondary{background:rgba(255,255,255,.10);border:1px solid var(--line)}
+    .row{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:12px
+    }
+
+    /* Sections */
+    .section{display:none; margin-top:18px}
+    .section.active{display:block}
+
+    /* Badge */
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 10px;border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.15);
+      color:var(--muted);
+      font-size:13px;
+      margin-top:10px
+    }
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--accent2)}
+  </style>
 </head>
-
 <body>
+  <div class="container">
+    <div class="top">
+      <div class="brand">Enzo Dev <span>— FiveM & Discord</span></div>
 
-<h1>Enzo Dev</h1>
-<p>Développeur FiveM & Discord</p>
+      <div class="tabs">
+        <div class="tab active" data-target="fivem">🎮 FiveM</div>
+        <div class="tab" data-target="discord">💬 Discord</div>
+      </div>
+    </div>
 
-<button onclick="window.location.href='https://discord.gg/'">
-Me contacter sur Discord
-</button>
+    <div class="hero">
+      <h1 id="title">Développement FiveM</h1>
+      <p class="subtitle" id="subtitle">Scripts, optimisation, UI, jobs… pour un serveur propre et performant.</p>
+      <div class="badge"><span class="dot"></span><span id="badgeText">ESX / QBCore / Standalone</span></div>
+    </div>
 
+    <!-- SECTION FIVEM -->
+    <section class="section active" id="fivem">
+      <div class="grid">
+        <div class="card">
+          <h3>Scripts & Features</h3>
+          <p>Jobs, menus, UI, garages, inventaires, crafting, shops, housing…</p>
+        </div>
+        <div class="card">
+          <h3>Optimisation</h3>
+          <p>Réduction du ms, correction erreurs, nettoyage, stabilité serveur.</p>
+        </div>
+        <div class="card">
+          <h3>Sécurité</h3>
+          <p>Anti-abus, events sécurisés, logs Discord, protections basiques.</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <a class="btn" href="https://discord.gg/" target="_blank" rel="noreferrer">Me contacter</a>
+        <a class="btn secondary" href="#contact" onclick="scrollToContact()">Demander un devis</a>
+      </div>
+    </section>
+
+    <!-- SECTION DISCORD -->
+    <section class="section" id="discord">
+      <div class="grid">
+        <div class="card">
+          <h3>Bot Tickets</h3>
+          <p>Tickets, transcripts, logs, assign staff, catégories, permissions.</p>
+        </div>
+        <div class="card">
+          <h3>Rôles & Automations</h3>
+          <p>Rôles auto, onboarding, vérification, boutons, panels staff.</p>
+        </div>
+        <div class="card">
+          <h3>Anti-raid</h3>
+          <p>Protection raids, anti-spam, logs, blacklist, alertes.</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <a class="btn" href="https://discord.gg/" target="_blank" rel="noreferrer">Me contacter</a>
+        <a class="btn secondary" href="#contact" onclick="scrollToContact()">Demander un devis</a>
+      </div>
+    </section>
+
+    <!-- CONTACT (optionnel) -->
+    <div id="contact" class="card" style="margin-top:18px">
+      <h3 style="margin:0 0 8px">Contact</h3>
+      <p style="margin:0;color:rgba(255,255,255,.75)">Ajoute ton lien Discord dans les boutons (dans le code).</p>
+    </div>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const sections = document.querySelectorAll(".section");
+
+    const title = document.getElementById("title");
+    const subtitle = document.getElementById("subtitle");
+    const badgeText = document.getElementById("badgeText");
+
+    function setActive(targetId){
+      // tabs
+      tabs.forEach(t => t.classList.toggle("active", t.dataset.target === targetId));
+      // sections
+      sections.forEach(s => s.classList.toggle("active", s.id === targetId));
+
+      // change hero text
+      if(targetId === "fivem"){
+        title.textContent = "Développement FiveM";
+        subtitle.textContent = "Scripts, optimisation, UI, jobs… pour un serveur propre et performant.";
+        badgeText.textContent = "ESX / QBCore / Standalone";
+      }else{
+        title.textContent = "Développement Discord";
+        subtitle.textContent = "Bots, tickets, rôles automatiques, anti-raid… pour un Discord pro.";
+        badgeText.textContent = "Discord.js / Python";
+      }
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => setActive(tab.dataset.target));
+    });
+
+    function scrollToContact(){
+      document.getElementById("contact").scrollIntoView({behavior:"smooth"});
+    }
+  </script>
 </body>
 </html>
