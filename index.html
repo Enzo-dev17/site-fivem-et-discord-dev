@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Enzo Dev — FiveM & Discord</title>
-  <meta name="description" content="Enzo Dev : développement FiveM (ESX/Standalone) et Discord (bots, tickets, rôles, anti-raid). Devis rapide." />
 
   <style>
     :root{
@@ -13,13 +12,12 @@
       --line:rgba(255,255,255,.12);
       --text:#ffffff;
       --muted:rgba(255,255,255,.72);
-      --accent:#5865F2;        /* Discord */
-      --accent2:#f59e0b;       /* FiveM / orange */
+      --accent:#5865F2;
+      --accent2:#f59e0b;
       --ok:#22c55e;
       --radius:16px;
       --shadow:0 12px 30px rgba(0,0,0,.35);
     }
-
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
     body{
@@ -33,6 +31,8 @@
     a{color:inherit;text-decoration:none}
 
     .container{max-width:1050px;margin:0 auto;padding:18px}
+
+    /* NAV */
     .topbar{
       position:sticky; top:0; z-index:10;
       background:rgba(15,23,42,.70);
@@ -44,7 +44,7 @@
       padding:12px 0;
     }
     .brand{
-      font-weight:900;font-size:18px; letter-spacing:.2px;
+      font-weight:900;font-size:18px;
       display:flex; align-items:center; gap:10px;
     }
     .logo{
@@ -91,8 +91,14 @@
       border:1px solid var(--line);
       box-shadow:none;
     }
+    .danger{
+      background:rgba(239,68,68,.15);
+      border:1px solid rgba(239,68,68,.35);
+      color:#fff;
+      box-shadow:none;
+    }
 
-    /* BANNIERE */
+    /* BANNER */
     .banner{
       height:260px;
       border-radius:22px;
@@ -108,7 +114,7 @@
     .banner::after{
       content:"";
       position:absolute; inset:0;
-      background:linear-gradient(90deg, rgba(0,0,0,.60), rgba(0,0,0,.15));
+      background:linear-gradient(90deg, rgba(0,0,0,.60), rgba(0,0,0,.12));
     }
     .banner-content{
       position:absolute; inset:0;
@@ -117,7 +123,7 @@
       z-index:1;
     }
     .banner h1{margin:0 0 8px; font-size:40px}
-    .banner p{margin:0; color:rgba(255,255,255,.80); line-height:1.5; max-width:720px}
+    .banner p{margin:0; color:rgba(255,255,255,.80); line-height:1.5; max-width:760px}
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       margin-top:12px;
@@ -131,9 +137,39 @@
     }
     .dot{width:8px;height:8px;border-radius:999px;background:var(--ok)}
 
+    /* SECTIONS + background watermark per category */
     section{padding:16px 0}
-    .section{display:none}
+    .section{
+      display:none;
+      position:relative;
+      overflow:hidden;
+      border-radius:22px;
+    }
     .section.active{display:block}
+    .section::before{
+      content:"";
+      position:absolute;
+      inset:-40px;
+      background-repeat:no-repeat;
+      background-position: right 40px center;
+      background-size: 380px;
+      opacity:.10;          /* transparence du logo derrière */
+      filter: blur(.2px);
+      pointer-events:none;
+      transform: rotate(-8deg);
+    }
+    /* Watermarks */
+    #fivem::before{ background-image:url("fivem-logo.png"); }
+    #discord::before{ background-image:url("discord-logo.png"); }
+    #avis::before{ background-image:url("discord-logo.png"); opacity:.06; }
+
+    .inner{
+      position:relative;
+      padding:16px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.12);
+      border-radius:22px;
+    }
 
     .grid{display:grid;gap:14px;margin-top:14px}
     @media (min-width:900px){ .grid{grid-template-columns:1fr 1fr 1fr} }
@@ -150,13 +186,7 @@
 
     /* AVIS */
     .stars{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .star{
-      font-size:28px;
-      cursor:pointer;
-      user-select:none;
-      opacity:.45;
-      transition:.12s ease;
-    }
+    .star{font-size:28px;cursor:pointer;user-select:none;opacity:.45;transition:.12s ease}
     .star.active{opacity:1; transform:translateY(-1px)}
     .input, textarea{
       width:100%;
@@ -171,6 +201,26 @@
     textarea{min-height:110px;resize:vertical}
     .two{display:grid;gap:12px}
     @media (min-width:780px){ .two{grid-template-columns:1fr 1fr} }
+
+    .reviews{
+      margin-top:14px;
+      display:grid;
+      gap:12px;
+    }
+    .review{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      border-radius:16px;
+      padding:14px;
+    }
+    .review-top{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      margin-bottom:6px;
+    }
+    .review b{font-size:14px}
+    .review small{color:var(--muted)}
+    .review .r-stars{letter-spacing:2px}
+    .review p{margin:8px 0 0;color:rgba(255,255,255,.80);line-height:1.6}
 
     .toast{
       position:fixed;right:16px;bottom:16px;
@@ -205,7 +255,7 @@
   </div>
 
   <div class="container">
-    <!-- BANNIERE -->
+    <!-- BANNER -->
     <div class="banner">
       <div class="banner-content">
         <h1 id="heroTitle">Développement FiveM</h1>
@@ -216,92 +266,105 @@
       </div>
     </div>
 
-    <!-- SECTION FIVEM -->
+    <!-- FIVEM -->
     <section class="section active" id="fivem">
-      <div class="grid">
-        <div class="card">
-          <h3>Scripts & Features</h3>
-          <p>Jobs, menus, UI, garages, inventaires, crafting, shops, housing… (ESX / standalone)</p>
-        </div>
-        <div class="card">
-          <h3>Optimisation & Fix</h3>
-          <p>Réduction du ms, correction erreurs, stabilité, nettoyage DB, scripts plus légers.</p>
-        </div>
-        <div class="card">
-          <h3>Logs & Sécurité</h3>
-          <p>Logs Discord, anti-abus basique, events sécurisés, protections et alertes.</p>
-        </div>
-      </div>
-
-      <div class="row">
-        <a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank" rel="noreferrer">💬 Me contacter sur Discord</a>
-        <button class="btn secondary" onclick="goAvis()">⭐ Donner un avis</button>
-      </div>
-    </section>
-
-    <!-- SECTION DISCORD -->
-    <section class="section" id="discord">
-      <div class="grid">
-        <div class="card">
-          <h3>Bot Tickets</h3>
-          <p>Tickets, transcripts, logs, assign staff, catégories, permissions propres.</p>
-        </div>
-        <div class="card">
-          <h3>Rôles & Automations</h3>
-          <p>Rôles auto, onboarding, vérification, boutons, panneaux staff, logs.</p>
-        </div>
-        <div class="card">
-          <h3>Anti-raid</h3>
-          <p>Anti-spam, protections, alertes, restrictions, sécurité basique et configuration.</p>
-        </div>
-      </div>
-
-      <div class="row">
-        <a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank" rel="noreferrer">💬 Me contacter sur Discord</a>
-        <button class="btn secondary" onclick="goAvis()">⭐ Donner un avis</button>
-      </div>
-    </section>
-
-    <!-- SECTION AVIS -->
-    <section class="section" id="avis">
-      <div class="card">
-        <h3 style="margin:0 0 10px">Donner un avis</h3>
-        <p style="margin:0 0 14px;color:var(--muted)">
-          Ton avis aide beaucoup. Tu peux mettre une note + un petit message. (Ça enverra un message prêt à copier sur Discord.)
-        </p>
-
-        <div class="two">
-          <div>
-            <label style="display:block;margin-bottom:8px;color:var(--muted);font-weight:700">Ta note</label>
-            <div class="stars" id="stars">
-              <span class="star" data-v="1">⭐</span>
-              <span class="star" data-v="2">⭐</span>
-              <span class="star" data-v="3">⭐</span>
-              <span class="star" data-v="4">⭐</span>
-              <span class="star" data-v="5">⭐</span>
-              <span style="color:var(--muted);font-weight:800" id="noteTxt">(0/5)</span>
-            </div>
+      <div class="inner">
+        <div class="grid">
+          <div class="card">
+            <h3>Scripts & Features</h3>
+            <p>Jobs, menus, UI, garages, inventaires, crafting, shops, housing… (ESX / standalone)</p>
           </div>
-
-          <div>
-            <label style="display:block;margin-bottom:8px;color:var(--muted);font-weight:700">Ton pseudo</label>
-            <input class="input" id="pseudo" placeholder="Ex: Enzo#0000 ou ton pseudo" />
+          <div class="card">
+            <h3>Optimisation & Fix</h3>
+            <p>Réduction du ms, correction erreurs, stabilité, nettoyage DB, scripts plus légers.</p>
           </div>
-        </div>
-
-        <div style="margin-top:12px">
-          <label style="display:block;margin-bottom:8px;color:var(--muted);font-weight:700">Message</label>
-          <textarea id="msg" placeholder="Ex: Très rapide, travail propre, je recommande !"></textarea>
+          <div class="card">
+            <h3>Logs & Sécurité</h3>
+            <p>Logs Discord, anti-abus basique, events sécurisés, protections et alertes.</p>
+          </div>
         </div>
 
         <div class="row">
-          <button class="btn" onclick="sendAvis()">Envoyer mon avis</button>
-          <button class="btn secondary" onclick="openDiscord()">Ouvrir Discord</button>
+          <a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank" rel="noreferrer">💬 Me contacter sur Discord</a>
+          <button class="btn secondary" onclick="goAvis()">⭐ Donner un avis</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DISCORD -->
+    <section class="section" id="discord">
+      <div class="inner">
+        <div class="grid">
+          <div class="card">
+            <h3>Bot Tickets</h3>
+            <p>Tickets, transcripts, logs, assign staff, catégories, permissions propres.</p>
+          </div>
+          <div class="card">
+            <h3>Rôles & Automations</h3>
+            <p>Rôles auto, onboarding, vérification, boutons, panneaux staff, logs.</p>
+          </div>
+          <div class="card">
+            <h3>Anti-raid</h3>
+            <p>Anti-spam, protections, alertes, restrictions, sécurité basique et configuration.</p>
+          </div>
         </div>
 
-        <p style="margin:12px 0 0;color:var(--muted);font-size:13px">
-          Astuce : si Discord ne s’ouvre pas, un message sera copié automatiquement, tu pourras le coller.
-        </p>
+        <div class="row">
+          <a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank" rel="noreferrer">💬 Me contacter sur Discord</a>
+          <button class="btn secondary" onclick="goAvis()">⭐ Donner un avis</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- AVIS -->
+    <section class="section" id="avis">
+      <div class="inner">
+        <div class="card">
+          <h3 style="margin:0 0 10px">Donner un avis</h3>
+          <p style="margin:0 0 14px;color:var(--muted)">
+            Les avis sont enregistrés et visibles sur ce site (sur le navigateur). ⭐
+          </p>
+
+          <div class="two">
+            <div>
+              <label style="display:block;margin-bottom:8px;color:var(--muted);font-weight:700">Ta note</label>
+              <div class="stars" id="stars">
+                <span class="star" data-v="1">⭐</span>
+                <span class="star" data-v="2">⭐</span>
+                <span class="star" data-v="3">⭐</span>
+                <span class="star" data-v="4">⭐</span>
+                <span class="star" data-v="5">⭐</span>
+                <span style="color:var(--muted);font-weight:800" id="noteTxt">(0/5)</span>
+              </div>
+            </div>
+
+            <div>
+              <label style="display:block;margin-bottom:8px;color:var(--muted);font-weight:700">Ton pseudo</label>
+              <input class="input" id="pseudo" placeholder="Ex: Enzo#0000 ou ton pseudo" />
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label style="display:block;margin-bottom:8px;color:var(--muted);font-weight:700">Message</label>
+            <textarea id="msg" placeholder="Ex: Très rapide, travail propre, je recommande !"></textarea>
+          </div>
+
+          <div class="row">
+            <button class="btn" onclick="addAvis()">Publier l’avis</button>
+            <button class="btn secondary" onclick="openDiscord()">Ouvrir Discord</button>
+            <button class="btn danger" onclick="clearAvis()">Supprimer mes avis (local)</button>
+          </div>
+
+          <p style="margin:12px 0 0;color:var(--muted);font-size:13px">
+            Astuce : si tu veux que les avis soient visibles pour tout le monde (pas seulement toi), dis-moi et je te mets une solution avec Google Form/Firebase.
+          </p>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin:0 0 10px">Avis publiés</h3>
+          <div id="reviews" class="reviews"></div>
+          <p id="noReviews" style="margin:0;color:var(--muted)">Aucun avis pour le moment.</p>
+        </div>
       </div>
     </section>
 
@@ -313,10 +376,10 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // CONFIG
     const DISCORD_INVITE = "https://discord.gg/FXF3v4YRRr";
+    const STORAGE_KEY = "enzo_dev_reviews_v1";
 
-    // Tabs logic
+    // Tabs
     const tabs = document.querySelectorAll(".tab");
     const sections = document.querySelectorAll(".section");
     const heroTitle = document.getElementById("heroTitle");
@@ -338,73 +401,78 @@
       } else {
         heroTitle.textContent = "Avis & retours";
         heroSub.textContent = "Une note et un message, ça m’aide énormément. Merci 🙏";
-        heroPill.textContent = "⭐ Note + message";
+        heroPill.textContent = "⭐ Avis visibles sur le site";
       }
       window.scrollTo({top: 0, behavior: "smooth"});
     }
-
     tabs.forEach(tab => tab.addEventListener("click", () => setActive(tab.dataset.target)));
 
-    // Footer year
+    // Year
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Avis stars
+    // Stars
     let note = 0;
     const noteTxt = document.getElementById("noteTxt");
     const starEls = document.querySelectorAll(".star");
-
     function updateStars(){
-      starEls.forEach(s => {
-        const v = Number(s.dataset.v);
-        s.classList.toggle("active", v <= note);
-      });
+      starEls.forEach(s => s.classList.toggle("active", Number(s.dataset.v) <= note));
       noteTxt.textContent = `(${note}/5)`;
     }
-    starEls.forEach(s => {
-      s.addEventListener("click", () => {
-        note = Number(s.dataset.v);
-        updateStars();
-      });
-    });
+    starEls.forEach(s => s.addEventListener("click", () => { note = Number(s.dataset.v); updateStars(); }));
 
-    function openDiscord(){
-      window.open(DISCORD_INVITE, "_blank", "noreferrer");
-    }
+    function openDiscord(){ window.open(DISCORD_INVITE, "_blank", "noreferrer"); }
+    function goAvis(){ setActive("avis"); }
 
-    function goAvis(){
-      setActive("avis");
-    }
-
-    async function copyText(text){
+    // Reviews storage
+    function loadReviews(){
       try{
-        await navigator.clipboard.writeText(text);
-        return true;
+        const raw = localStorage.getItem(STORAGE_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
       }catch(e){
-        // fallback old method
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-        return true;
+        return [];
       }
     }
+    function saveReviews(arr){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    }
 
-    async function sendAvis(){
-      const pseudo = document.getElementById("pseudo").value.trim() || "Anonyme";
-      const message = document.getElementById("msg").value.trim() || "(pas de message)";
-      const n = note || 0;
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
 
-      const payload =
-`⭐ Avis Enzo Dev
-Note: ${n}/5
-Pseudo: ${pseudo}
-Message: ${message}`;
+    function renderReviews(){
+      const reviewsEl = document.getElementById("reviews");
+      const noEl = document.getElementById("noReviews");
 
-      await copyText(payload);
-      toast("✅ Avis copié ! Colle-le sur Discord. J’ouvre ton serveur…");
-      openDiscord();
+      const data = loadReviews().sort((a,b) => b.ts - a.ts);
+      reviewsEl.innerHTML = "";
+
+      if(!data.length){
+        noEl.style.display = "block";
+        return;
+      }
+      noEl.style.display = "none";
+
+      for(const r of data){
+        const stars = "⭐".repeat(r.note) + "☆".repeat(5 - r.note);
+        const date = new Date(r.ts).toLocaleString("fr-FR");
+        const div = document.createElement("div");
+        div.className = "review";
+        div.innerHTML = `
+          <div class="review-top">
+            <div><b>${escapeHtml(r.pseudo)}</b> <small>• ${escapeHtml(date)}</small></div>
+            <div class="r-stars">${stars}</div>
+          </div>
+          <p>${escapeHtml(r.msg)}</p>
+        `;
+        reviewsEl.appendChild(div);
+      }
     }
 
     function toast(text){
@@ -414,6 +482,43 @@ Message: ${message}`;
       clearTimeout(window.__t);
       window.__t = setTimeout(() => el.style.display = "none", 4500);
     }
+
+    function addAvis(){
+      const pseudo = (document.getElementById("pseudo").value || "").trim() || "Anonyme";
+      const msg = (document.getElementById("msg").value || "").trim();
+
+      if(note < 1){
+        toast("❌ Mets une note (1 à 5 étoiles).");
+        return;
+      }
+      if(msg.length < 3){
+        toast("❌ Écris un petit message (au moins 3 caractères).");
+        return;
+      }
+
+      const arr = loadReviews();
+      arr.push({ pseudo, msg, note, ts: Date.now() });
+      saveReviews(arr);
+
+      // reset
+      document.getElementById("pseudo").value = "";
+      document.getElementById("msg").value = "";
+      note = 0;
+      updateStars();
+
+      renderReviews();
+      toast("✅ Avis publié ! (il reste sur le site)");
+    }
+
+    function clearAvis(){
+      localStorage.removeItem(STORAGE_KEY);
+      renderReviews();
+      toast("🗑️ Avis supprimés (sur ce navigateur).");
+    }
+
+    // initial render
+    renderReviews();
+    updateStars();
   </script>
 </body>
 </html>
