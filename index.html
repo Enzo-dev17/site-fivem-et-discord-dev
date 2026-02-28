@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Enzo Dev — FiveM, Sites & Discord</title>
-  <meta name="description" content="Enzo Dev : développement FiveM (ESX/Standalone), création de sites et Discord. Avis publics." />
+  <meta name="description" content="Enzo Dev : développement FiveM (ESX/Standalone), création de sites, Discord. Avis publics + tarifs PayPal." />
 
   <style>
     :root{
@@ -356,7 +356,7 @@
 
     footer{margin-top:14px;color:rgba(255,255,255,.70);padding:14px 2px 30px}
 
-    /* Debug bar (anti page blanche) */
+    /* Debug bar */
     #debugBar{
       display:none;
       position:fixed;
@@ -394,6 +394,7 @@
         <div class="tab active" data-id="bienvenue" onclick="show('bienvenue', this)">👋 Bienvenue</div>
         <div class="tab" data-id="fivem" onclick="show('fivem', this)">🎮 FiveM</div>
         <div class="tab" data-id="sites" onclick="show('sites', this)">🖥️ Sites</div>
+        <div class="tab" data-id="tarifs" onclick="show('tarifs', this)">💶 Tarifs</div>
         <div class="tab" data-id="discord" onclick="show('discord', this)">💬 Discord</div>
         <div class="tab" data-id="avis" onclick="show('avis', this)">⭐ Avis</div>
       </div>
@@ -433,6 +434,7 @@
           <div class="actions">
             <button class="btn" onclick="show('fivem')">🎮 FiveM</button>
             <button class="btn secondary" onclick="show('sites')">🖥️ Sites</button>
+            <button class="btn secondary" onclick="show('tarifs')">💶 Tarifs</button>
             <button class="btn secondary" onclick="show('discord')">💬 Discord</button>
             <button class="btn secondary" onclick="show('avis')">⭐ Avis</button>
           </div>
@@ -480,7 +482,55 @@
 
           <div class="actions">
             <a class="btn" id="discordBtnSites" href="#" target="_blank" rel="noreferrer">💬 Me contacter</a>
-            <button class="btn secondary" onclick="show('avis')">⭐ Voir les avis</button>
+            <button class="btn secondary" onclick="show('tarifs')">💶 Voir les tarifs</button>
+          </div>
+        </div>
+
+        <!-- TARIFS -->
+        <div class="section" id="tarifs">
+          <div class="grid">
+            <div class="card">
+              <h3>🖥️ Site vitrine</h3>
+              <p class="muted">1 page, design moderne, responsive, boutons contact.</p>
+              <p style="font-size:28px;font-weight:900;margin-top:10px">30€</p>
+              <div class="actions">
+                <a class="btn" href="https://paypal.me/legacyawfa430/30" target="_blank" rel="noreferrer">Payer 30€ (PayPal)</a>
+                <button class="btn secondary" onclick="show('sites')">Voir détails</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>🎮 Script FiveM</h3>
+              <p class="muted">Script simple ESX/Standalone (menu / feature).</p>
+              <p style="font-size:28px;font-weight:900;margin-top:10px">20€</p>
+              <div class="actions">
+                <a class="btn" href="https://paypal.me/legacyawfa430/20" target="_blank" rel="noreferrer">Payer 20€ (PayPal)</a>
+                <button class="btn secondary" onclick="show('fivem')">Voir détails</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>💬 Bot Discord</h3>
+              <p class="muted">Tickets / rôles / logs / config propre.</p>
+              <p style="font-size:28px;font-weight:900;margin-top:10px">15€</p>
+              <div class="actions">
+                <a class="btn" href="https://paypal.me/legacyawfa430/15" target="_blank" rel="noreferrer">Payer 15€ (PayPal)</a>
+                <button class="btn secondary" onclick="show('discord')">Voir détails</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h3>📌 Infos paiement</h3>
+            <p class="muted" style="line-height:1.7">
+              Paiement via PayPal :
+              <b>paypal.me/legacyawfa430</b><br>
+              Après paiement, envoie-moi la preuve + ta demande sur Discord.
+            </p>
+            <div class="actions">
+              <a class="btn secondary" href="https://paypal.me/legacyawfa430" target="_blank" rel="noreferrer">Ouvrir PayPal</a>
+              <a class="btn" href="https://discord.gg/FXF3v4YRRr" target="_blank" rel="noreferrer">Me contacter</a>
+            </div>
           </div>
         </div>
 
@@ -503,6 +553,7 @@
 
           <div class="actions">
             <a class="btn" id="discordBtn2" href="#" target="_blank" rel="noreferrer">💬 Me contacter</a>
+            <button class="btn secondary" onclick="show('tarifs')">💶 Voir les tarifs</button>
             <button class="btn secondary" onclick="show('avis')">⭐ Donner un avis</button>
           </div>
         </div>
@@ -587,6 +638,7 @@
         bienvenue: "banner.png",
         fivem: "fivem-logo.png",
         sites: "banner.png",
+        tarifs: "banner.png",
         discord: "discord-logo.png",
         avis: "banner.png"
       }
@@ -631,6 +683,11 @@
         heroTitle.textContent="Création de sites";
         heroDesc.textContent="Sites vitrines, landing pages, formulaires, design moderne et responsive.";
         heroPill.textContent="Mobile parfait";
+      }
+      if(section==="tarifs"){
+        heroTitle.textContent="Tarifs";
+        heroDesc.textContent="Choisis une offre et paye directement via PayPal.";
+        heroPill.textContent="PayPal : paypal.me/legacyawfa430";
       }
       if(section==="discord"){
         heroTitle.textContent="Développement Discord";
@@ -677,7 +734,7 @@
     const SUPABASE_URL = "https://xbqvikovspdkxbncnhlq.supabase.co";
 
     // ✅ Colle ici UNIQUEMENT ta clé anon public Supabase (Project Settings -> API -> anon public)
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhicXZpa292c3Bka3hibmNuaGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNjMxODMsImV4cCI6MjA4NzgzOTE4M30.mQYqFRgoVXcycRb_27ywHpUpo4qfX9gT2zVddepMI1Q";
+    const SUPABASE_ANON_KEY = "COLLE_TA_CLE_ANON_PUBLIC_ICI";
 
     const loginBtn = document.getElementById("loginBtn");
     const logoutBtn = document.getElementById("logoutBtn");
@@ -757,7 +814,6 @@
     }
     cancelEditBtn.addEventListener("click", ()=> setEditMode(false));
 
-    // Init Supabase (safe)
     let supabase = null;
     try{
       supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -794,7 +850,6 @@
         return { logged:false, isAdmin:false, myUserId:null };
       }
 
-      // clé pas remplacée -> évite page blanche
       if(!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.includes("COLLE_")){
         me.textContent = "⚠️ Mets ta clé Supabase 'anon public' dans SUPABASE_ANON_KEY.";
         form.style.display = "none";
@@ -818,7 +873,6 @@
       logoutBtn.style.display = "inline-flex";
       form.style.display = "block";
 
-      // admin ?
       const uid = meInfo.user.id;
       const res = await supabase.from("admins").select("user_id").eq("user_id", uid).maybeSingle();
       const isAdmin = !!res.data;
@@ -882,7 +936,6 @@
         list.appendChild(div);
       }
 
-      // Edit (owner)
       list.querySelectorAll("button[data-edit]").forEach(btn=>{
         btn.addEventListener("click", ()=>{
           const id = Number(btn.getAttribute("data-edit"));
@@ -891,7 +944,6 @@
         });
       });
 
-      // Delete (owner)
       list.querySelectorAll("button[data-mydel]").forEach(btn=>{
         btn.addEventListener("click", async ()=>{
           const sessionState2 = await refreshSession();
@@ -913,7 +965,6 @@
         });
       });
 
-      // Delete (admin)
       list.querySelectorAll("button[data-admindel]").forEach(btn=>{
         btn.addEventListener("click", async ()=>{
           const id = Number(btn.getAttribute("data-admindel"));
@@ -972,7 +1023,6 @@
         discord_avatar_url: meInfo.avatar
       };
 
-      // UPDATE si édition
       if(editingId){
         const { error } = await supabase
           .from("reviews")
@@ -990,7 +1040,6 @@
         return;
       }
 
-      // INSERT
       const { error } = await supabase
         .from("reviews")
         .insert({ user_id: meInfo.user.id, ...payload });
@@ -1004,7 +1053,6 @@
       await loadReviews();
     });
 
-    // Boot
     await refreshSession();
     await loadReviews();
 
