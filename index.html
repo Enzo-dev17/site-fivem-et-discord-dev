@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Enzo Dev — FiveM & Discord</title>
+  <meta name="description" content="Enzo Dev : développement FiveM (ESX/Standalone) et Discord (bots, tickets, rôles, anti-raid). Avis et devis." />
 
   <style>
     :root{
@@ -12,8 +13,8 @@
       --line:rgba(255,255,255,.12);
       --text:#ffffff;
       --muted:rgba(255,255,255,.72);
-      --accent:#5865F2;
-      --accent2:#f59e0b;
+      --accent:#5865F2;        /* Discord */
+      --accent2:#f59e0b;       /* FiveM / orange */
       --ok:#22c55e;
       --radius:16px;
       --shadow:0 12px 30px rgba(0,0,0,.35);
@@ -137,7 +138,7 @@
     }
     .dot{width:8px;height:8px;border-radius:999px;background:var(--ok)}
 
-    /* SECTIONS + background watermark per category */
+    /* SECTIONS + watermark per category */
     section{padding:16px 0}
     .section{
       display:none;
@@ -153,12 +154,10 @@
       background-repeat:no-repeat;
       background-position: right 40px center;
       background-size: 380px;
-      opacity:.10;          /* transparence du logo derrière */
-      filter: blur(.2px);
+      opacity:.10;
       pointer-events:none;
       transform: rotate(-8deg);
     }
-    /* Watermarks */
     #fivem::before{ background-image:url("fivem-logo.png"); }
     #discord::before{ background-image:url("discord-logo.png"); }
     #avis::before{ background-image:url("discord-logo.png"); opacity:.06; }
@@ -202,11 +201,7 @@
     .two{display:grid;gap:12px}
     @media (min-width:780px){ .two{grid-template-columns:1fr 1fr} }
 
-    .reviews{
-      margin-top:14px;
-      display:grid;
-      gap:12px;
-    }
+    .reviews{margin-top:14px;display:grid;gap:12px}
     .review{
       border:1px solid var(--line);
       background:rgba(255,255,255,.04);
@@ -259,9 +254,7 @@
     <div class="banner">
       <div class="banner-content">
         <h1 id="heroTitle">Développement FiveM</h1>
-        <p id="heroSub">
-          Scripts ESX / Standalone, optimisation, UI, logs Discord… Un serveur propre, stable et pro.
-        </p>
+        <p id="heroSub">Scripts ESX / Standalone, optimisation, UI, logs Discord… Un serveur propre, stable et pro.</p>
         <div class="pill"><span class="dot"></span><span id="heroPill">ESX / Standalone (pas de QBCore)</span></div>
       </div>
     </div>
@@ -322,7 +315,7 @@
         <div class="card">
           <h3 style="margin:0 0 10px">Donner un avis</h3>
           <p style="margin:0 0 14px;color:var(--muted)">
-            Les avis sont enregistrés et visibles sur ce site (sur le navigateur). ⭐
+            Les avis sont enregistrés et visibles sur le site (sur le navigateur).
           </p>
 
           <div class="two">
@@ -340,7 +333,7 @@
 
             <div>
               <label style="display:block;margin-bottom:8px;color:var(--muted);font-weight:700">Ton pseudo</label>
-              <input class="input" id="pseudo" placeholder="Ex: Enzo#0000 ou ton pseudo" />
+              <input class="input" id="pseudo" placeholder="Ex: ton pseudo" />
             </div>
           </div>
 
@@ -354,10 +347,6 @@
             <button class="btn secondary" onclick="openDiscord()">Ouvrir Discord</button>
             <button class="btn danger" onclick="clearAvis()">Supprimer mes avis (local)</button>
           </div>
-
-          <p style="margin:12px 0 0;color:var(--muted);font-size:13px">
-            Astuce : si tu veux que les avis soient visibles pour tout le monde (pas seulement toi), dis-moi et je te mets une solution avec Google Form/Firebase.
-          </p>
         </div>
 
         <div class="card" style="margin-top:14px">
@@ -406,6 +395,7 @@
       window.scrollTo({top: 0, behavior: "smooth"});
     }
     tabs.forEach(tab => tab.addEventListener("click", () => setActive(tab.dataset.target)));
+    function goAvis(){ setActive("avis"); }
 
     // Year
     document.getElementById("year").textContent = new Date().getFullYear();
@@ -421,7 +411,6 @@
     starEls.forEach(s => s.addEventListener("click", () => { note = Number(s.dataset.v); updateStars(); }));
 
     function openDiscord(){ window.open(DISCORD_INVITE, "_blank", "noreferrer"); }
-    function goAvis(){ setActive("avis"); }
 
     // Reviews storage
     function loadReviews(){
@@ -516,7 +505,7 @@
       toast("🗑️ Avis supprimés (sur ce navigateur).");
     }
 
-    // initial render
+    // initial
     renderReviews();
     updateStars();
   </script>
